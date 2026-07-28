@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grace & Glory — Café</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar navbar-expand-lg sticky-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="assets/logo.png" alt="Grace & Glory" class="brand-logo">
+                <span class="brand-text">Grace <span class="accent">&</span> Glory</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#products" role="button" data-bs-toggle="dropdown" aria-expanded="false">Products</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#products" data-filter="all">All Products</a></li>
+                            <li><a class="dropdown-item" href="#products" data-filter="coffee">Hot & Cold Coffee</a></li>
+                            <li><a class="dropdown-item" href="#products" data-filter="frappe">Frappé</a></li>
+                            <li><a class="dropdown-item" href="#products" data-filter="milktea">Milk Tea</a></li>
+                            <li><a class="dropdown-item" href="#products" data-filter="pastry">Pastries</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+                <a href="#contact" class="btn btn-accent ms-lg-3 mt-2 mt-lg-0">Order Now</a>
+            </div>
+
+            <!-- Cart Icon -->
+            <button class="cart-btn d-none d-lg-flex" id="cartToggle" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas" aria-label="View cart">
+                <i class="bi bi-bag-fill"></i>
+                <span class="cart-badge" id="cartBadge">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <section id="home" class="hero-section">
+        <div class="hero-bg">
+            <img src="assets/hero_img.png" alt="Grace and Glory Café interior" class="hero-img">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="container hero-content text-center">
+            <h1 class="display-font hero-title animate-fade-up">Sip, Savor<br><span class="accent-text">Celebrate</span></h1>
+            <p class="hero-subtitle animate-fade-up delay-1">Warm drinks, sweet bites, and good vibes — your neighborhood café escape.</p>
+            <a href="#products" class="btn btn-accent btn-lg animate-fade-up delay-2">Explore Our Menu</a>
+        </div>
+    </section>
+
+    <!-- ==================== ABOUT ==================== -->
+    <section id="about" class="about-section py-5">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6 animate-on-scroll">
+                    <div class="about-img-wrapper">
+                        <img src="assets/hero_img.png" alt="Inside Grace and Glory Café" class="about-img rounded-4">
+                        <div class="about-img-accent"></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 animate-on-scroll">
+                    <p class="section-tag">Our Story</p>
+                    <h2 class="section-title display-font">A Place Where<br><span class="accent-text">Flavors Meet Feelings</span></h2>
+                    <p class="about-text">Grace & Glory Tastebuds is more than a café — it's a cozy corner where every cup is crafted with care and every bite tells a story. From our hand-brewed coffees to our signature milk teas and freshly baked pastries, we serve moments of comfort and joy.</p>
+                    <p class="about-text">Whether you're catching up with friends, diving into work, or simply treating yourself, our warm space and friendly faces are here to make your day a little sweeter.</p>
+                    <a href="#products" class="btn btn-outline-accent mt-3">Discover Our Menu</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== PRODUCTS ==================== -->
+    <section id="products" class="products-section py-5">
+        <div class="container">
+            <div class="text-center mb-5 animate-on-scroll">
+                <p class="section-tag">Our Menu</p>
+                <h2 class="section-title display-font">Crafted With <span class="accent-text">Love</span></h2>
+                <p class="section-subtitle">Every sip and bite is made to warm your soul.</p>
+            </div>
+
+            <!-- Filter Dropdown -->
+            <div class="d-flex justify-content-center mb-4 animate-on-scroll">
+                <div class="dropdown">
+                    <button class="btn btn-filter dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-funnel-fill me-2"></i>Filter by Category
+                    </button>
+                    <ul class="dropdown-menu filter-menu">
+                        <li><button class="dropdown-item filter-btn active" data-filter="all">All Products</button></li>
+                        <li><button class="dropdown-item filter-btn" data-filter="coffee">Hot & Cold Coffee</button></li>
+                        <li><button class="dropdown-item filter-btn" data-filter="frappe">Frappé</button></li>
+                        <li><button class="dropdown-item filter-btn" data-filter="milktea">Milk Tea</button></li>
+                        <li><button class="dropdown-item filter-btn" data-filter="pastry">Pastries</button></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Product Cards Grid -->
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="productGrid">
+
+                <!-- Coffee 1: Hot Americano -->
+                <div class="col product-card animate-on-scroll" data-category="coffee">
+                    <div class="card h-100">
+                        <div class="card-img-top-wrapper">
+                            <img src="assets/hotcold_coffee/hot_americano.png" class="card-img-top" alt="Hot Americano">
+                            <span class="category-badge">Coffee</span>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title display-font">Hot Americano</h5>
+                            <p class="card-text">Bold, smooth, and aromatic — a timeless classic brewed to perfection.</p>
+                            <div class="size-selector mb-3">
+                                <div class="btn-group btn-group-sm w-100" role="group" data-size-prices='{"S":95,"M":115,"L":135}'>
+                                    <input type="radio" class="btn-check" name="size-coffee1" id="size-coffee1-s" value="S" checked>
+                                    <label class="btn btn-size" for="size-coffee1-s">S — ₱95</label>
+                                    <input type="radio" class="btn-check" name="size-coffee1" id="size-coffee1-m" value="M">
+                                    <label class="btn btn-size" for="size-coffee1-m">M — ₱115</label>
+                                    <input type="radio" class="btn-check" name="size-coffee1" id="size-coffee1-l" value="L">
+                                    <label class="btn btn-size" for="size-coffee1-l">L — ₱135</label>
+                                </div>
+                            </div>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="price-tag" data-base-price="95">₱95</span>
+                                <button class="btn btn-accent btn-add-to-order" data-name="Hot Americano" data-price="95">Add to Order <i class="bi bi-plus-circle ms-1"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coffee 2: Iced Oreo Coffee Latte -->
+                <div class="col product-card animate-on-scroll" data-category="coffee">
+                    <div class="card h-100">
+                        <div class="card-img-top-wrapper">
+                            <img src="assets/hotcold_coffee/iced_oreo_coffee_latte.png" class="card-img-top" alt="Iced Oreo Coffee Latte">
+                            <span class="category-badge">Coffee</span>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title display-font">Iced Oreo Coffee Latte</h5>
+                            <p class="card-text">Creamy, crunchy, and coffee-loaded — the perfect indulgence on ice.</p>
+                            <div class="size-selector mb-3">
+                                <div class="btn-group btn-group-sm w-100" role="group" data-size-prices='{"S":125,"M":145,"L":165}'>
+                                    <input type="radio" class="btn-check" name="size-coffee2" id="size-coffee2-s" value="S" checked>
+                                    <label class="btn btn-size" for="size-coffee2-s">S — ₱125</label>
+                                    <input type="radio" class="btn-check" name="size-coffee2" id="size-coffee2-m" value="M">
+                                    <label class="btn btn-size" for="size-coffee2-m">M — ₱145</label>
+                                    <input type="radio" class="btn-check" name="size-coffee2" id="size-coffee2-l" value="L">
+                                    <label class="btn btn-size" for="size-coffee2-l">L — ₱165</label>
+                                </div>
+                            </div>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="price-tag" data-base-price="125">₱125</span>
+                                <button class="btn btn-accent btn-add-to-order" data-name="Iced Oreo Coffee Latte" data-price="125">Add to Order <i class="bi bi-plus-circle ms-1"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Frappe 1: Taro Frappe -->
+                <div class="col product-card animate-on-scroll" data-category="frappe">
+                    <div class="card h-100">
+                        <div class="card-img-top-wrapper">
+                            <img src="assets/frappe/taro.png" class="card-img-top" alt="Taro Frappé">
+                            <span class="category-badge">Frappé</span>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title display-font">Taro Frappé</h5>
+                            <p class="card-text">Sweet, nutty, and refreshing — a lavender-hued frozen treat.</p>
+                            <div class="size-selector mb-3">
+                                <div class="btn-group btn-group-sm w-100" role="group" data-size-prices='{"S":135,"M":155,"L":175}'>
+                                    <input type="radio" class="btn-check" name="size-frappe1" id="size-frappe1-s" value="S" checked>
+                                    <label class="btn btn-size" for="size-frappe1-s">S — ₱135</label>
+                                    <input type="radio" class="btn-check" name="size-frappe1" id="size-frappe1-m" value="M">
+                                    <label class="btn btn-size" for="size-frappe1-m">M — ₱155</label>
+                                    <input type="radio" class="btn-check" name="size-frappe1" id="size-frappe1-l" value="L">
+                                    <label class="btn btn-size" for="size-frappe1-l">L — ₱175</label>
+                                </div>
+                            </div>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="price-tag" data-base-price="135">₱135</span>
+                                <button class="btn btn-accent btn-add-to-order" data-name="Taro Frappé" data-price="135">Add to Order <i class="bi bi-plus-circle ms-1"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Milk Tea 1: Okinawa Milk Tea -->
+                <div class="col product-card animate-on-scroll" data-category="milktea">
+                    <div class="card h-100">
+                        <div class="card-img-top-wrapper">
+                            <img src="assets/milk_tea/okinawa.png" class="card-img-top" alt="Okinawa Milk Tea">
+                            <span class="category-badge">Milk Tea</span>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title display-font">Okinawa Milk Tea</h5>
+                            <p class="card-text">Rich, caramel-like, and deeply satisfying — a Japanese-inspired favorite.</p>
+                            <div class="size-selector mb-3">
+                                <div class="btn-group btn-group-sm w-100" role="group" data-size-prices='{"S":115,"M":135,"L":155}'>
+                                    <input type="radio" class="btn-check" name="size-milktea1" id="size-milktea1-s" value="S" checked>
+                                    <label class="btn btn-size" for="size-milktea1-s">S — ₱115</label>
+                                    <input type="radio" class="btn-check" name="size-milktea1" id="size-milktea1-m" value="M">
+                                    <label class="btn btn-size" for="size-milktea1-m">M — ₱135</label>
+                                    <input type="radio" class="btn-check" name="size-milktea1" id="size-milktea1-l" value="L">
+                                    <label class="btn btn-size" for="size-milktea1-l">L — ₱155</label>
+                                </div>
+                            </div>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="price-tag" data-base-price="115">₱115</span>
+                                <button class="btn btn-accent btn-add-to-order" data-name="Okinawa Milk Tea" data-price="115">Add to Order <i class="bi bi-plus-circle ms-1"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Milk Tea 2: Wintermelon Milk Tea -->
+                <div class="col product-card animate-on-scroll" data-category="milktea">
+                    <div class="card h-100">
+                        <div class="card-img-top-wrapper">
+                            <img src="assets/milk_tea/wintermelon.png" class="card-img-top" alt="Wintermelon Milk Tea">
+                            <span class="category-badge">Milk Tea</span>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title display-font">Wintermelon Milk Tea</h5>
+                            <p class="card-text">Light, fruity, and subtly sweet — a refreshing twist on milk tea.</p>
+                            <div class="size-selector mb-3">
+                                <div class="btn-group btn-group-sm w-100" role="group" data-size-prices='{"S":115,"M":135,"L":155}'>
+                                    <input type="radio" class="btn-check" name="size-milktea2" id="size-milktea2-s" value="S" checked>
+                                    <label class="btn btn-size" for="size-milktea2-s">S — ₱115</label>
+                                    <input type="radio" class="btn-check" name="size-milktea2" id="size-milktea2-m" value="M">
+                                    <label class="btn btn-size" for="size-milktea2-m">M — ₱135</label>
+                                    <input type="radio" class="btn-check" name="size-milktea2" id="size-milktea2-l" value="L">
+                                    <label class="btn btn-size" for="size-milktea2-l">L — ₱155</label>
+                                </div>
+                            </div>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="price-tag" data-base-price="115">₱115</span>
+                                <button class="btn btn-accent btn-add-to-order" data-name="Wintermelon Milk Tea" data-price="115">Add to Order <i class="bi bi-plus-circle ms-1"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pastry 1: Cheesecake Slice -->
+                <div class="col product-card animate-on-scroll" data-category="pastry">
+                    <div class="card h-100">
+                        <div class="card-img-top-wrapper">
+                            <img src="assets/pastries/cheesecake_slice.png" class="card-img-top" alt="Cheesecake Slice">
+                            <span class="category-badge">Pastry</span>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title display-font">Cheesecake Slice</h5>
+                            <p class="card-text">Creamy, dreamy, and melt-in-your-mouth — the ultimate sweet treat.</p>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="price-tag" data-base-price="165">₱165</span>
+                                <button class="btn btn-accent btn-add-to-order" data-name="Cheesecake Slice" data-price="165">Add to Order <i class="bi bi-plus-circle ms-1"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== ACCORDION (FAQ) ==================== -->
+    <section id="faq" class="faq-section py-5">
+        <div class="container">
+            <div class="text-center mb-5 animate-on-scroll">
+                <p class="section-tag">FAQ</p>
+                <h2 class="section-title display-font">Got <span class="accent-text">Questions?</span></h2>
+                <p class="section-subtitle">Here are some things our customers often ask.</p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item animate-on-scroll">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faqOne" aria-expanded="true">
+                                    What are your store hours?
+                                </button>
+                            </h2>
+                            <div id="faqOne" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">We're open Monday to Sunday, from 8:00 AM to 9:00 PM. We're always ready to serve you your favorite drinks and bites!</div>
+                            </div>
+                        </div>
+                        <div class="accordion-item animate-on-scroll">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqTwo">
+                                    Do you offer delivery or takeout?
+                                </button>
+                            </h2>
+                            <div id="faqTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">Yes! You can order for takeout directly at the counter. For delivery, check us out on your favorite food delivery apps.</div>
+                            </div>
+                        </div>
+                        <div class="accordion-item animate-on-scroll">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqThree">
+                                    Are there dairy-free or vegan options?
+                                </button>
+                            </h2>
+                            <div id="faqThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">Absolutely! We offer plant-based milk alternatives (oat, soy, almond) for most of our drinks. Just ask our baristas!</div>
+                            </div>
+                        </div>
+                        <div class="accordion-item animate-on-scroll">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqFour">
+                                    Can I customize my drink?
+                                </button>
+                            </h2>
+                            <div id="faqFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">Of course! Adjust sweetness, ice level, and toppings to make your drink exactly how you like it. Just let us know when you order.</div>
+                            </div>
+                        </div>
+                        <div class="accordion-item animate-on-scroll">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqFive">
+                                    Do you have a loyalty or rewards program?
+                                </button>
+                            </h2>
+                            <div id="faqFive" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">We're working on something exciting! Stay tuned for our upcoming loyalty rewards program — exciting perks are on the way.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CAROUSEL (Gallery) ==================== -->
+    <section id="gallery" class="gallery-section py-5">
+        <div class="container">
+            <div class="text-center mb-5 animate-on-scroll">
+                <p class="section-tag">Gallery</p>
+                <h2 class="section-title display-font">A Peek Inside <span class="accent-text">Our Menu</span></h2>
+                <p class="section-subtitle">Visuals that make your cravings real.</p>
+            </div>
+
+            <div id="galleryCarousel" class="carousel slide animate-on-scroll" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#galleryCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#galleryCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#galleryCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#galleryCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                    <button type="button" data-bs-target="#galleryCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                </div>
+                <div class="carousel-inner rounded-4 overflow-hidden">
+                    <div class="carousel-item active">
+                        <img src="assets/milk_tea/okinawa.png" class="d-block w-100 carousel-img" alt="Okinawa Milk Tea">
+                        <div class="carousel-caption">
+                            <h5 class="display-font">Okinawa Milk Tea</h5>
+                            <p>Rich, caramel warmth in every sip.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/frappe/mango.png" class="d-block w-100 carousel-img" alt="Mango Frappé">
+                        <div class="carousel-caption">
+                            <h5 class="display-font">Mango Frappé</h5>
+                            <p>Tropical sweetness, blended to perfection.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/hotcold_coffee/cookies_n_cream.png" class="d-block w-100 carousel-img" alt="Cookies & Cream">
+                        <div class="carousel-caption">
+                            <h5 class="display-font">Cookies & Cream</h5>
+                            <p>Classic comfort in a cup.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/pastries/red_velvet_cake_slice.png" class="d-block w-100 carousel-img" alt="Red Velvet Cake">
+                        <div class="carousel-caption">
+                            <h5 class="display-font">Red Velvet Cake</h5>
+                            <p>Velvety layers of indulgence.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/frappe/strawberry_cheesecake.png" class="d-block w-100 carousel-img" alt="Strawberry Cheesecake Frappé">
+                        <div class="carousel-caption">
+                            <h5 class="display-font">Strawberry Cheesecake Frappé</h5>
+                            <p>Strawberry dreams, cheesecake vibes.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#galleryCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#galleryCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CONTACT FORM ==================== -->
+    <section id="contact" class="contact-section py-5">
+        <div class="container">
+            <div class="text-center mb-5 animate-on-scroll">
+                <p class="section-tag">Get in Touch</p>
+                <h2 class="section-title display-font">We'd Love to <span class="accent-text">Hear From You</span></h2>
+                <p class="section-subtitle">Have a question, feedback, or want to place a bulk order? Drop us a message!</p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-7 animate-on-scroll">
+                    <form class="contact-form needs-validation" id="contactForm" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="contactName" class="form-label">Full Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="contactName" placeholder="Juan Dela Cruz" required>
+                                <div class="invalid-feedback">Please enter your name.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="contactEmail" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="contactEmail" placeholder="you@example.com" required>
+                                <div class="invalid-feedback">Please enter a valid email.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="contactPhone" class="form-label">Phone Number <span class="text-muted">(optional)</span></label>
+                                <input type="tel" class="form-control" id="contactPhone" placeholder="09XX XXX XXXX">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="contactProduct" class="form-label">Product Interest <span class="text-danger">*</span></label>
+                                <select class="form-select" id="contactProduct" required>
+                                    <option value="" disabled selected>Choose a category...</option>
+                                    <option value="coffee">Hot & Cold Coffee</option>
+                                    <option value="frappe">Frappé</option>
+                                    <option value="milktea">Milk Tea</option>
+                                    <option value="pastry">Pastries</option>
+                                    <option value="combo">Combo / Bundles</option>
+                                    <option value="other">Other / General Inquiry</option>
+                                </select>
+                                <div class="invalid-feedback">Please select a product interest.</div>
+                            </div>
+                            <div class="col-12">
+                                <label for="contactMessage" class="form-label">Your Message <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="contactMessage" rows="5" placeholder="Tell us what's on your mind..." required maxlength="500"></textarea>
+                                <div class="d-flex justify-content-between">
+                                    <div class="invalid-feedback">Please enter a message.</div>
+                                    <small class="text-muted ms-auto"><span id="charCount">0</span>/500 characters</small>
+                                </div>
+                            </div>
+                            <div class="col-12 text-center mt-2">
+                                <button type="submit" class="btn btn-accent btn-lg">Send Message <i class="bi bi-send ms-2"></i></button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Success Alert (hidden by default) -->
+                    <div class="alert alert-success mt-4 text-center d-none" id="formSuccess" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <strong>Thank you!</strong> Your message has been sent. We'll get back to you soon!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="site-footer">
+        <!-- CTA Banner -->
+        <div class="footer-cta text-center">
+            <div class="container animate-on-scroll">
+                <h3 class="display-font footer-cta-title">Ready to Treat Yourself?</h3>
+                <p class="footer-cta-text">Visit us today or place an order — your taste buds will thank you.</p>
+                <a href="#contact" class="btn btn-light btn-lg">Order Now</a>
+            </div>
+        </div>
+
+        <!-- Footer Content -->
+        <div class="footer-main py-5">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <h5 class="footer-brand display-font">Grace <span class="accent">&</span> Glory</h5>
+                        <p class="footer-text">A neighborhood café serving handcrafted drinks, fresh pastries, and warm vibes since 2024.</p>
+                        <div class="social-links">
+                            <a href="#" class="social-icon" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                            <a href="#" class="social-icon" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                            <a href="#" class="social-icon" aria-label="TikTok"><i class="bi bi-tiktok"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-4">
+                        <h6 class="footer-heading">Quick Links</h6>
+                        <ul class="footer-links">
+                            <li><a href="#home">Home</a></li>
+                            <li><a href="#about">About</a></li>
+                            <li><a href="#products">Menu</a></li>
+                            <li><a href="#gallery">Gallery</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-4">
+                        <h6 class="footer-heading">Contact Us</h6>
+                        <ul class="footer-links contact-info">
+                            <li><i class="bi bi-geo-alt-fill"></i> 123 Coffee Street, Manila</li>
+                            <li><i class="bi bi-telephone-fill"></i> +63 912 345 6789</li>
+                            <li><i class="bi bi-envelope-fill"></i> hello@graceandglory.cafe</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-4">
+                        <h6 class="footer-heading">Store Hours</h6>
+                        <ul class="footer-links">
+                            <li>Monday — Friday: 8AM – 9PM</li>
+                            <li>Saturday — Sunday: 9AM – 10PM</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="footer-bottom text-center py-3">
+            <div class="container">
+                <p class="mb-0">&copy; 2026 Grace & Glory Tastebuds. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== CART OFFCANVAS ==================== -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title display-font" id="cartOffcanvasLabel">Your Order</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column">
+            <div class="cart-items flex-grow-1" id="cartItems">
+                <div class="cart-empty text-center py-5" id="cartEmpty">
+                    <i class="bi bi-bag" style="font-size: 3rem; color: var(--peach);"></i>
+                    <p class="mt-3 text-muted">Your order is empty.<br>Add something yummy!</p>
+                </div>
+            </div>
+            <div class="cart-summary border-top pt-3 mt-3" id="cartSummary" style="display: none;">
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal</span>
+                    <span id="cartSubtotal">₱0</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3 fw-bold fs-5">
+                    <span>Total</span>
+                    <span class="accent-text" id="cartTotal">₱0</span>
+                </div>
+                <button class="btn btn-accent w-100 mb-2" id="btnCheckout">Checkout <i class="bi bi-arrow-right ms-2"></i></button>
+                <button class="btn btn-outline-danger w-100 btn-sm" id="btnClearCart">Clear Order</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== BACK TO TOP ==================== -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+
+    <!-- ==================== CHECKOUT TOAST ==================== -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div class="toast" id="checkoutToast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                <strong class="me-auto">Order Placed!</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Thank you! Your order has been received. We'll prepare it right away.
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5.3 JS Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+</body>
+</html>
