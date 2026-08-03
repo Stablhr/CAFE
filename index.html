@@ -47,6 +47,7 @@
                             <li><a class="dropdown-item" href="#products" data-filter="pastry">Pastries</a></li>
                         </ul>
                     </li>
+                    <li class="nav-item"><a class="nav-link" href="#recommend">Recommend</a></li>
                     <li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
                 </ul>
@@ -691,6 +692,73 @@
         </div>
     </section>
 
+    <!-- ==================== AI RECOMMENDER ==================== -->
+    <section id="recommend" class="ai-section py-5">
+        <div class="container">
+            <div class="text-center mb-5 animate-on-scroll">
+                <p class="section-tag">AI Barista</p>
+                <h2 class="section-title display-font">What's Your <span class="accent-text">Vibe?</span></h2>
+                <p class="section-subtitle">Tell us your mood and what you're up to — our AI barista will hand-pick the perfect cup (and a bite).</p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
+                    <div class="ai-panel rounded-4 p-4 p-md-5 animate-on-scroll">
+
+                        <!-- Mood chips -->
+                        <div class="mb-4">
+                            <p class="ai-step-label"><i class="bi bi-emoji-smile me-1"></i>How are you feeling today?</p>
+                            <div class="ai-chip-row" role="group" aria-label="Select your mood" data-group="mood">
+                                <button type="button" class="ai-chip" data-value="energized">Energized</button>
+                                <button type="button" class="ai-chip" data-value="cozy">Relaxed &amp; Cozy</button>
+                                <button type="button" class="ai-chip" data-value="social">Happy &amp; Social</button>
+                                <button type="button" class="ai-chip" data-value="focused">Focused &amp; Productive</button>
+                                <button type="button" class="ai-chip" data-value="winddown">Wind-Down</button>
+                                <button type="button" class="ai-chip" data-value="adventurous">Adventurous</button>
+                            </div>
+                        </div>
+
+                        <!-- Activity chips -->
+                        <div class="mb-4">
+                            <p class="ai-step-label"><i class="bi bi-cup-hot me-1"></i>What are you up to?</p>
+                            <div class="ai-chip-row" role="group" aria-label="Select your activity" data-group="activity">
+                                <button type="button" class="ai-chip" data-value="study">Working / Studying</button>
+                                <button type="button" class="ai-chip" data-value="friends">Chatting with Friends</button>
+                                <button type="button" class="ai-chip" data-value="solo">Solo Me-Time</button>
+                                <button type="button" class="ai-chip" data-value="date">Date</button>
+                                <button type="button" class="ai-chip" data-value="rainy">Rainy &amp; Chilly Day</button>
+                                <button type="button" class="ai-chip" data-value="summer">Hot Summer Day</button>
+                                <button type="button" class="ai-chip" data-value="sweettooth">Sweet Tooth Cravings</button>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3 flex-wrap">
+                            <button type="button" class="btn btn-accent btn-lg" id="btnRecommend" disabled>
+                                <i class="bi bi-magic me-2"></i>Get My Picks
+                            </button>
+                            <button type="button" class="btn btn-link text-decoration-none" id="btnResetRecommend">Reset</button>
+                        </div>
+
+                        <!-- Results -->
+                        <div id="aiResults" class="d-none">
+                            <hr class="my-4">
+                            <div id="aiBrewing" class="text-center py-4">
+                                <div class="ai-pulse mb-2"><i class="bi bi-cup-hot"></i></div>
+                                <p class="ai-brewing-text mb-0">Brewing your perfect picks…</p>
+                            </div>
+                            <div id="aiOutput" class="d-none">
+                                <p class="ai-vibe-line mb-4"><i class="bi bi-stars me-2"></i><span id="aiVibeText"></span></p>
+                                <div class="row g-4" id="aiRecCards"></div>
+                                <div class="pairing-card rounded-4 p-4 mt-4" id="aiPairing"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- ==================== ACCORDION (FAQ) ==================== -->
     <section id="faq" class="faq-section py-5">
         <div class="container">
@@ -919,6 +987,7 @@
                             <li><a href="#home">Home</a></li>
                             <li><a href="#about">About</a></li>
                             <li><a href="#products">Menu</a></li>
+                            <li><a href="#recommend">Recommend</a></li>
                             <li><a href="#gallery">Gallery</a></li>
                             <li><a href="#contact">Contact</a></li>
                         </ul>

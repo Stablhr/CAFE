@@ -177,22 +177,21 @@
         });
     }
 
-    /* Add-to-order buttons */
-    document.querySelectorAll('.btn-add-to-order').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            var card = this.closest('.product-card');
-            var name = this.getAttribute('data-name');
-            var sel = getCardSelection(card);
-            addToCart(name, sel.size, sel.price);
-            var originalText = this.innerHTML;
-            var self = this;
-            self.innerHTML = '<i class="bi bi-check-lg me-1"></i> Added!';
-            self.disabled = true;
-            setTimeout(function () {
-                self.innerHTML = originalText;
-                self.disabled = false;
-            }, 1200);
-        });
+    /* Add-to-order buttons (delegated — works for dynamically added cards) */
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('.btn-add-to-order');
+        if (!btn) return;
+        var card = btn.closest('.product-card, .rec-card');
+        var name = btn.getAttribute('data-name');
+        var sel = getCardSelection(card);
+        addToCart(name, sel.size, sel.price);
+        var originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="bi bi-check-lg me-1"></i> Added!';
+        btn.disabled = true;
+        setTimeout(function () {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }, 1200);
     });
 
     /* Size selector updates price */
@@ -269,6 +268,213 @@
 
     updateFilterCounts();
     setActiveFilter('all');
+
+    /* =============================================
+       AI BARISTA — MOOD RECOMMENDER
+    ============================================= */
+    var aiMoods = {
+        energized:    { label: 'energized',    tags: { energetic: 3, bold: 2, refreshing: 1 } },
+        cozy:         { label: 'relaxed and cozy', tags: { cozy: 3, warm: 2, comforting: 2 } },
+        social:       { label: 'happy and social', tags: { fun: 3, refreshing: 2, sweet: 1 } },
+        focused:      { label: 'focused and productive', tags: { focused: 3, energetic: 2, bold: 1 } },
+        winddown:     { label: 'wind-down',    tags: { relaxing: 3, cozy: 2, comforting: 2 } },
+        adventurous:  { label: 'adventurous',  tags: { fun: 3, bold: 2, indulgent: 1 } }
+    };
+
+    var aiActivities = {
+        study:      { label: 'studying or working',     tags: { focused: 3, energetic: 2 } },
+        friends:    { label: 'chatting with friends',   tags: { fun: 3, social: 2, sweet: 1 } },
+        solo:       { label: 'solo me-time',            tags: { cozy: 2, comforting: 2, indulgent: 1 } },
+        date:       { label: 'a date',                  tags: { indulgent: 2, sweet: 2, fun: 1 } },
+        rainy:      { label: 'a rainy, chilly day',     tags: { warm: 3, cozy: 2, comforting: 2 } },
+        summer:     { label: 'a hot summer day',        tags: { refreshing: 3, cold: 2 } },
+        sweettooth: { label: 'a sweet-tooth craving',   tags: { sweet: 3, indulgent: 2, creamy: 1 } }
+    };
+
+    var aiProducts = [
+        { name: 'Hot Americano', img: 'assets/hotcold_coffee/hot_americano.png', price: 95, cat: 'coffee', tags: ['bold', 'energetic', 'focused', 'warm'] },
+        { name: 'Iced Oreo Coffee Latte', img: 'assets/hotcold_coffee/iced_oreo_coffee_latte.png', price: 125, cat: 'coffee', tags: ['indulgent', 'creamy', 'sweet', 'refreshing', 'cold'] },
+        { name: 'Cold Brew Coffee', img: 'assets/hotcold_coffee/cold_brew_coffee.png', price: 95, cat: 'coffee', tags: ['bold', 'energetic', 'refreshing', 'cold'] },
+        { name: 'Iced Coffee with Milk', img: 'assets/hotcold_coffee/iced_coffee_with_ milk.png', price: 95, cat: 'coffee', tags: ['refreshing', 'creamy', 'light', 'cold'] },
+        { name: 'Cookies & Cream', img: 'assets/hotcold_coffee/cookies_n_cream.png', price: 125, cat: 'coffee', tags: ['indulgent', 'sweet', 'creamy', 'fun', 'cold'] },
+        { name: 'Taro Frappé', img: 'assets/frappe/taro.png', price: 135, cat: 'frappe', tags: ['refreshing', 'sweet', 'indulgent', 'fun', 'cold'] },
+        { name: 'Mango Frappé', img: 'assets/frappe/mango.png', price: 135, cat: 'frappe', tags: ['refreshing', 'fruity', 'fun', 'sweet', 'cold'] },
+        { name: 'Dark Chocolate Frappé', img: 'assets/frappe/dark_chocolate.png', price: 135, cat: 'frappe', tags: ['indulgent', 'refreshing', 'fun', 'sweet', 'cold'] },
+        { name: 'Red Velvet Frappé', img: 'assets/frappe/red_velvet.png', price: 135, cat: 'frappe', tags: ['indulgent', 'fun', 'sweet', 'refreshing', 'cold'] },
+        { name: 'Salted Caramel Frappé', img: 'assets/frappe/salted_caramel.png', price: 135, cat: 'frappe', tags: ['indulgent', 'sweet', 'fun', 'refreshing', 'cold'] },
+        { name: 'Strawberry Cheesecake Frappé', img: 'assets/frappe/strawberry_cheesecake.png', price: 135, cat: 'frappe', tags: ['refreshing', 'fruity', 'sweet', 'fun', 'cold'] },
+        { name: 'Okinawa Milk Tea', img: 'assets/milk_tea/okinawa.png', price: 115, cat: 'milktea', tags: ['cozy', 'creamy', 'sweet', 'comforting'] },
+        { name: 'Wintermelon Milk Tea', img: 'assets/milk_tea/wintermelon.png', price: 115, cat: 'milktea', tags: ['refreshing', 'light', 'sweet', 'cozy'] },
+        { name: 'Hazelnut Milk Tea', img: 'assets/milk_tea/hazelnut.png', price: 115, cat: 'milktea', tags: ['cozy', 'creamy', 'sweet', 'comforting'] },
+        { name: 'Hokkaido Milk Tea', img: 'assets/milk_tea/hokkaido.png', price: 115, cat: 'milktea', tags: ['creamy', 'sweet', 'cozy', 'comforting'] },
+        { name: 'Salted Caramel Milk Tea', img: 'assets/milk_tea/salted_caramel.png', price: 115, cat: 'milktea', tags: ['indulgent', 'sweet', 'cozy', 'creamy'] },
+        { name: 'Taro Milk Tea', img: 'assets/milk_tea/taro.jpg', price: 115, cat: 'milktea', tags: ['creamy', 'sweet', 'cozy', 'comforting'] },
+        { name: 'Cheesecake Slice', img: 'assets/pastries/cheesecake_slice.png', price: 165, cat: 'pastry', tags: ['indulgent', 'sweet', 'comforting', 'creamy'] },
+        { name: 'Muffin', img: 'assets/pastries/muffin.png', price: 95, cat: 'pastry', tags: ['comforting', 'cozy', 'light', 'sweet'] },
+        { name: 'Banana Loaf', img: 'assets/pastries/banana_loaf.png', price: 120, cat: 'pastry', tags: ['comforting', 'cozy', 'sweet'] },
+        { name: 'Red Velvet Cake Slice', img: 'assets/pastries/red_velvet_cake_slice.png', price: 175, cat: 'pastry', tags: ['indulgent', 'sweet', 'fun', 'creamy'] },
+        { name: 'Triple Chocolate Slice', img: 'assets/pastries/tripple_chocolate_slice.png', price: 160, cat: 'pastry', tags: ['indulgent', 'sweet', 'comforting', 'creamy'] }
+    ];
+
+    var selectedMood = null;
+    var selectedActivity = null;
+
+    function setupAiChips() {
+        document.querySelectorAll('.ai-chip').forEach(function (chip) {
+            chip.addEventListener('click', function () {
+                var group = this.closest('[data-group]').getAttribute('data-group');
+                this.closest('[data-group]').querySelectorAll('.ai-chip').forEach(function (c) {
+                    c.classList.remove('active');
+                    c.setAttribute('aria-pressed', 'false');
+                });
+                this.classList.add('active');
+                this.setAttribute('aria-pressed', 'true');
+                if (group === 'mood') selectedMood = this.getAttribute('data-value');
+                else selectedActivity = this.getAttribute('data-value');
+                updateRecommendButton();
+            });
+        });
+    }
+
+    function updateRecommendButton() {
+        var btn = document.getElementById('btnRecommend');
+        btn.disabled = selectedMood === null;
+    }
+
+    function buildProfile() {
+        var profile = {};
+        function add(tagMap) {
+            for (var tag in tagMap) {
+                if (tagMap.hasOwnProperty(tag)) profile[tag] = (profile[tag] || 0) + tagMap[tag];
+            }
+        }
+        if (selectedMood && aiMoods[selectedMood]) add(aiMoods[selectedMood].tags);
+        if (selectedActivity && aiActivities[selectedActivity]) add(aiActivities[selectedActivity].tags);
+        return profile;
+    }
+
+    function scoreProduct(product, profile) {
+        var score = 0;
+        for (var i = 0; i < product.tags.length; i++) {
+            score += profile[product.tags[i]] || 0;
+        }
+        return score;
+    }
+
+    function pickReason(product, profile) {
+        var matched = [];
+        for (var i = 0; i < product.tags.length; i++) {
+            if (profile[product.tags[i]] > 0) matched.push(product.tags[i]);
+        }
+        var words = matched.length >= 2 ? matched : product.tags.slice(0, 2);
+        return 'A ' + words.join(' + ') + ' pick that fits your vibe perfectly.';
+    }
+
+    function categoryLabel(cat) {
+        return { coffee: 'Coffee', frappe: 'Frappé', milktea: 'Milk Tea', pastry: 'Pastry' }[cat] || '';
+    }
+
+    function aiCardHtml(product, reason) {
+        return '<div class="col-md-6 col-lg-4">' +
+            '<div class="card h-100 rec-card">' +
+            '<div class="card-img-top-wrapper">' +
+            '<img src="' + product.img + '" class="card-img-top" alt="' + product.name + '">' +
+            '<span class="category-badge">' + categoryLabel(product.cat) + '</span>' +
+            '</div>' +
+            '<div class="card-body d-flex flex-column">' +
+            '<h5 class="card-title display-font">' + product.name + '</h5>' +
+            '<p class="rec-reason">' + reason + '</p>' +
+            '<div class="mt-auto d-flex justify-content-between align-items-center">' +
+            '<span class="price-tag">₱' + product.price + '</span>' +
+            '<button class="btn btn-accent btn-add-to-order" data-name="' + product.name + '" data-price="' + product.price + '">Add to Order <i class="bi bi-plus-circle ms-1"></i></button>' +
+            '</div></div></div></div>';
+    }
+
+    function getRecommendations() {
+        var profile = buildProfile();
+        var ranked = aiProducts.map(function (p) {
+            return { product: p, score: scoreProduct(p, profile) };
+        }).filter(function (r) { return r.score > 0; })
+          .sort(function (a, b) {
+              if (b.score !== a.score) return b.score - a.score;
+              return aiProducts.indexOf(a.product) - aiProducts.indexOf(b.product);
+          });
+        return ranked.map(function (r) { return r.product; });
+    }
+
+    function showRecommendations() {
+        var picks = getRecommendations();
+        var vibe = document.getElementById('aiVibeText');
+        var cards = document.getElementById('aiRecCards');
+        var pairing = document.getElementById('aiPairing');
+        var moodLabel = selectedMood ? aiMoods[selectedMood].label : '';
+        var actLabel = selectedActivity ? aiActivities[selectedActivity].label : '';
+
+        if (picks.length === 0) {
+            var fallback = aiProducts.filter(function (p) { return p.cat === 'frappe' || p.cat === 'pastry'; });
+            picks = [fallback[0], fallback[fallback.length - 1]];
+            vibe.textContent = 'We couldn\'t pin your exact vibe — but trust the barista\'s specials for a delicious surprise:';
+        } else {
+            vibe.textContent = 'For a ' + moodLabel + (actLabel ? ' ' + actLabel : '') + ' kind of day, our AI barista recommends:';
+        }
+        var profile = buildProfile();
+        picks = picks.slice(0, 3);
+        cards.innerHTML = picks.map(function (p) { return aiCardHtml(p, pickReason(p, profile)); }).join('');
+
+        var drinks = picks.filter(function (p) { return p.cat !== 'pastry'; });
+        var pastries = picks.filter(function (p) { return p.cat === 'pastry'; });
+        if (drinks.length && pastries.length) {
+            pairing.innerHTML =
+                '<h6 class="display-font pairing-title"><i class="bi bi-arrow-repeat me-2"></i>Perfect Pairing</h6>' +
+                '<div class="d-flex flex-column flex-md-row gap-3 align-items-md-center">' +
+                '<div class="pairing-item">' + drinks[0].name + ' — <span class="price-tag">₱' + drinks[0].price + '</span>' +
+                '<button class="btn btn-accent btn-sm ms-2 btn-add-to-order" data-name="' + drinks[0].name + '" data-price="' + drinks[0].price + '">Add</button></div>' +
+                '<i class="bi bi-plus-lg pairing-plus d-none d-md-inline"></i>' +
+                '<div class="pairing-item">' + pastries[0].name + ' — <span class="price-tag">₱' + pastries[0].price + '</span>' +
+                '<button class="btn btn-accent btn-sm ms-2 btn-add-to-order" data-name="' + pastries[0].name + '" data-price="' + pastries[0].price + '">Add</button></div>' +
+                '</div>';
+        } else {
+            pairing.innerHTML = '';
+        }
+    }
+
+    function resetAi() {
+        selectedMood = null;
+        selectedActivity = null;
+        document.querySelectorAll('.ai-chip').forEach(function (c) {
+            c.classList.remove('active');
+            c.setAttribute('aria-pressed', 'false');
+        });
+        document.getElementById('btnRecommend').disabled = true;
+        var results = document.getElementById('aiResults');
+        results.classList.add('d-none');
+        document.getElementById('aiBrewing').classList.remove('d-none');
+        document.getElementById('aiOutput').classList.add('d-none');
+    }
+
+    var btnRecommend = document.getElementById('btnRecommend');
+    if (btnRecommend) {
+        btnRecommend.addEventListener('click', function () {
+            var results = document.getElementById('aiResults');
+            results.classList.remove('d-none');
+            var brewing = document.getElementById('aiBrewing');
+            var output = document.getElementById('aiOutput');
+            brewing.classList.remove('d-none');
+            output.classList.add('d-none');
+            results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            setTimeout(function () {
+                brewing.classList.add('d-none');
+                output.classList.remove('d-none');
+                output.classList.add('ai-fade-in');
+                showRecommendations();
+            }, 700);
+        });
+    }
+
+    var btnResetAi = document.getElementById('btnResetRecommend');
+    if (btnResetAi) btnResetAi.addEventListener('click', resetAi);
+
+    setupAiChips();
 
     /* =============================================
        SMOOTH SCROLL
