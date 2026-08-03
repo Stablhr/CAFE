@@ -461,7 +461,6 @@
             var output = document.getElementById('aiOutput');
             brewing.classList.remove('d-none');
             output.classList.add('d-none');
-            results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             setTimeout(function () {
                 brewing.classList.add('d-none');
                 output.classList.remove('d-none');

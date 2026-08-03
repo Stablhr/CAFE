@@ -47,7 +47,7 @@
                             <li><a class="dropdown-item" href="#products" data-filter="pastry">Pastries</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="#recommend">Recommend</a></li>
+                    <li class="nav-item"><a class="nav-link" role="button" data-bs-toggle="modal" data-bs-target="#recommendModal">Recommend</a></li>
                     <li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
                 </ul>
@@ -692,18 +692,18 @@
         </div>
     </section>
 
-    <!-- ==================== AI RECOMMENDER ==================== -->
-    <section id="recommend" class="ai-section py-5">
-        <div class="container">
-            <div class="text-center mb-5 animate-on-scroll">
-                <p class="section-tag">AI Barista</p>
-                <h2 class="section-title display-font">What's Your <span class="accent-text">Vibe?</span></h2>
-                <p class="section-subtitle">Tell us your mood and what you're up to — our AI barista will hand-pick the perfect cup (and a bite).</p>
-            </div>
+    <!-- ==================== AI BARISTA MODAL ==================== -->
+    <div class="modal fade" id="recommendModal" tabindex="-1" aria-labelledby="recommendModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title display-font" id="recommendModalLabel">What's Your <span class="accent-text">Vibe?</span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="ai-modal-sub mb-4">Tell us your mood and what you're up to — our AI barista will hand-pick the perfect cup (and a bite).</p>
 
-            <div class="row justify-content-center">
-                <div class="col-lg-9">
-                    <div class="ai-panel rounded-4 p-4 p-md-5 animate-on-scroll">
+                    <div class="ai-panel rounded-4 p-3 p-md-4">
 
                         <!-- Mood chips -->
                         <div class="mb-4">
@@ -757,7 +757,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- ==================== ACCORDION (FAQ) ==================== -->
     <section id="faq" class="faq-section py-5">
@@ -987,7 +987,7 @@
                             <li><a href="#home">Home</a></li>
                             <li><a href="#about">About</a></li>
                             <li><a href="#products">Menu</a></li>
-                            <li><a href="#recommend">Recommend</a></li>
+                            <li><a role="button" data-bs-toggle="modal" data-bs-target="#recommendModal">Recommend</a></li>
                             <li><a href="#gallery">Gallery</a></li>
                             <li><a href="#contact">Contact</a></li>
                         </ul>

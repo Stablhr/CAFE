@@ -622,10 +622,12 @@ a {
 }
 
 /* ============================================
-   AI BARISTA / RECOMMENDER SECTION
+   AI BARISTA / RECOMMENDER MODAL
    ============================================ */
-.ai-section {
-    background: var(--white);
+.ai-modal-sub {
+    font-size: 0.95rem;
+    color: var(--charcoal);
+    opacity: 0.75;
 }
 
 .ai-panel {
