@@ -1369,3 +1369,40 @@ a {
     background: var(--terracotta);
     color: var(--white);
 }
+
+/* ============================================
+   CHECKOUT QR MODAL
+   ============================================ */
+.checkout-qr-wrap {
+    background: var(--white);
+    border: 2px dashed var(--peach);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.checkout-qr {
+    background: var(--white);
+    padding: 0.5rem;
+    border-radius: var(--radius-md);
+}
+
+.checkout-qr img,
+.checkout-qr canvas {
+    display: block;
+    margin: 0 auto;
+    border-radius: var(--radius-sm);
+}
+
+.checkout-order-summary {
+    background: var(--peach-light);
+    border: 1px solid var(--peach);
+    border-radius: var(--radius-md);
+    padding: 0.9rem 1.1rem;
+}
+
+.checkout-order-summary > div {
+    padding: 0.25rem 0;
+}

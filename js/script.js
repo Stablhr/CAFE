@@ -164,15 +164,93 @@
 
     if (btnClear) btnClear.addEventListener('click', clearCart);
 
+    /* =============================================
+       CHECKOUT → BARISTA QR CODE
+    ============================================= */
+    function encodeOrder(order) {
+        var json = JSON.stringify(order);
+        var bytes = new TextEncoder().encode(json);
+        var bin = '';
+        for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+        return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+
+    function buildOrder() {
+        return {
+            id: 'GG-' + Date.now().toString(36).toUpperCase() +
+                '-' + Math.random().toString(36).slice(2, 6).toUpperCase(),
+            placed: new Date().toISOString(),
+            items: cart.map(function (item) {
+                return { name: item.name, size: item.size, price: item.price, qty: item.qty };
+            }),
+            total: getTotal()
+        };
+    }
+
+    function baristaLink(encoded) {
+        var url = location.href.split('#')[0].split('?')[0];
+        var slash = url.lastIndexOf('/');
+        var dir = slash >= 0 ? url.substring(0, slash + 1) : '';
+        return dir + 'barista.html#order=' + encoded;
+    }
+
+    var lastCheckoutLink = '';
+    var btnCopyLink = document.getElementById('btnCopyOrderLink');
+
+    if (btnCopyLink) {
+        btnCopyLink.addEventListener('click', function () {
+            if (!lastCheckoutLink) return;
+            function copyFallback() {
+                var ta = document.createElement('textarea');
+                ta.value = lastCheckoutLink;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); } catch (e) { /* ignore */ }
+                document.body.removeChild(ta);
+                btnCopyLink.innerHTML = '<i class="bi bi-check-lg me-1"></i>Copied!';
+                setTimeout(function () { btnCopyLink.innerHTML = 'Copy Link'; }, 1500);
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(lastCheckoutLink).then(function () {
+                    btnCopyLink.innerHTML = '<i class="bi bi-check-lg me-1"></i>Copied!';
+                    setTimeout(function () { btnCopyLink.innerHTML = 'Copy Link'; }, 1500);
+                }, copyFallback);
+            } else {
+                copyFallback();
+            }
+        });
+    }
+
+    function showCheckoutModal(order) {
+        document.getElementById('checkoutOrderId').textContent = order.id;
+        var itemCount = 0;
+        for (var i = 0; i < order.items.length; i++) itemCount += order.items[i].qty;
+        document.getElementById('checkoutItemCount').textContent = itemCount;
+        document.getElementById('checkoutOrderTotal').textContent = '\u20B1' + order.total;
+
+        lastCheckoutLink = baristaLink(encodeOrder(order));
+
+        var qrEl = document.getElementById('checkoutQr');
+        qrEl.innerHTML = '';
+        if (window.QRCode) {
+            new QRCode(qrEl, { text: lastCheckoutLink, width: 176, height: 176, correctLevel: QRCode.CorrectLevel.M });
+        }
+        new bootstrap.Modal(document.getElementById('checkoutModal')).show();
+    }
+
     if (btnCheckout) {
         btnCheckout.addEventListener('click', function () {
             if (cart.length === 0) return;
+            var order = buildOrder();
             var offcanvasEl = document.getElementById('cartOffcanvas');
             var inst = bootstrap.Offcanvas.getInstance(offcanvasEl);
             if (inst) inst.hide();
             var toastEl = document.getElementById('checkoutToast');
             var toast = new bootstrap.Toast(toastEl, { delay: 5000 });
             toast.show();
+            showCheckoutModal(order);
             clearCart();
         });
     }

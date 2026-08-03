@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barista Queue — Grace & Glory</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Custom CSS (shared theme) -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .barista-header {
+            background: var(--navy);
+            color: var(--ivory);
+            padding: 0.9rem 0;
+        }
+
+        .barista-header .brand-text {
+            font-size: 1.15rem;
+        }
+
+        .barista-badge {
+            background: var(--terracotta);
+            color: var(--white);
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.4rem 0.9rem;
+            border-radius: 999px;
+            letter-spacing: 0.03em;
+        }
+
+        .barista-empty {
+            color: var(--charcoal);
+            opacity: 0.75;
+        }
+
+        .barista-empty i {
+            font-size: 3.5rem;
+            color: var(--peach);
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .barista-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--peach);
+            transition: box-shadow var(--transition);
+        }
+
+        .barista-card.completed {
+            opacity: 0.55;
+            filter: grayscale(1);
+        }
+
+        .barista-card-header {
+            background: var(--peach-light);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            padding: 0.9rem 1.1rem;
+            border-bottom: 1px dashed var(--peach);
+        }
+
+        .barista-order-id {
+            font-family: 'Fraunces', serif;
+            font-weight: 900;
+            color: var(--maroon);
+            letter-spacing: 0.02em;
+        }
+
+        .barista-time {
+            font-size: 0.78rem;
+            color: var(--charcoal);
+            opacity: 0.75;
+        }
+
+        .barista-item {
+            padding: 0.55rem 1.1rem;
+            border-bottom: 1px dashed var(--peach-light);
+            font-size: 0.92rem;
+        }
+
+        .barista-item:last-child {
+            border-bottom: none;
+        }
+
+        .barista-qty {
+            display: inline-block;
+            min-width: 1.7rem;
+            text-align: center;
+            background: var(--peach);
+            color: var(--maroon);
+            font-weight: 700;
+            border-radius: var(--radius-sm);
+            padding: 0.05rem 0.4rem;
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .barista-item-size {
+            color: var(--terracotta);
+            font-size: 0.78rem;
+        }
+
+        .barista-item-price {
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .barista-total {
+            color: var(--maroon);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="barista-header">
+        <div class="container d-flex justify-content-between align-items-center">
+            <span class="brand-text">Grace <span class="accent">&amp;</span> Glory</span>
+            <span class="barista-badge"><i class="bi bi-cup-hot me-1"></i>Barista View</span>
+        </div>
+    </header>
+
+    <!-- ==================== ORDER QUEUE ==================== -->
+    <main class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1 class="display-font section-title mb-0">Order <span class="accent-text">Queue</span></h1>
+            <span class="badge text-bg-warning d-none" id="baristaCount"></span>
+        </div>
+
+        <div class="barista-empty text-center py-5" id="baristaEmpty">
+            <i class="bi bi-qr-code-scan"></i>
+            <h2 class="display-font">Waiting for orders</h2>
+            <p class="mb-0">Customers will scan their order QR code to send it here.<br>Keep this page open on the counter.</p>
+        </div>
+
+        <div class="row g-3" id="baristaOrders"></div>
+    </main>
+
+    <!-- Bootstrap 5.3 JS Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        (function () {
+            'use strict';
+
+            var STORAGE_KEY = 'gg_barista_queue';
+            var orders = [];
+
+            function loadOrders() {
+                try {
+                    var raw = sessionStorage.getItem(STORAGE_KEY);
+                    orders = raw ? JSON.parse(raw) : [];
+                } catch (e) {
+                    orders = [];
+                }
+            }
+
+            function saveOrders() {
+                try {
+                    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
+                } catch (e) { /* ignore quota/security errors */ }
+            }
+
+            function decodeOrder(encoded) {
+                var s = encoded.replace(/-/g, '+').replace(/_/g, '/');
+                while (s.length % 4 !== 0) s += '=';
+                var bin = atob(s);
+                var bytes = new Uint8Array(bin.length);
+                for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+                return JSON.parse(new TextDecoder().decode(bytes));
+            }
+
+            function timeLabel(iso) {
+                var d = new Date(iso);
+                return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+            }
+
+            function orderCardHtml(order) {
+                var items = '';
+                for (var i = 0; i < order.items.length; i++) {
+                    var it = order.items[i];
+                    var lineTotal = it.price * it.qty;
+                    items += '<div class="barista-item d-flex justify-content-between align-items-center">' +
+                        '<div><span class="barista-qty">' + it.qty + '</span>' +
+                        '<strong>' + it.name + '</strong>' +
+                        '<div class="barista-item-size">' + it.size + '</div></div>' +
+                        '<span class="barista-item-price">&#8369;' + lineTotal + '</span></div>';
+                }
+                return '<div class="col-md-6 col-xl-4">' +
+                    '<div class="barista-card h-100" data-id="' + order.id + '">' +
+                    '<div class="barista-card-header d-flex justify-content-between align-items-center">' +
+                    '<span class="barista-order-id">' + order.id + '</span>' +
+                    '<span class="barista-time">' + timeLabel(order.placed) + '</span></div>' +
+                    '<div>' + items + '</div>' +
+                    '<div class="p-3 d-flex justify-content-between align-items-center">' +
+                    '<span class="barista-total">Total: &#8369;' + order.total + '</span>' +
+                    '<button type="button" class="btn btn-accent btn-sm" data-action="complete">Complete</button>' +
+                    '</div></div></div>';
+            }
+
+            function render() {
+                var container = document.getElementById('baristaOrders');
+                var empty = document.getElementById('baristaEmpty');
+                var count = document.getElementById('baristaCount');
+                var html = '';
+                for (var i = 0; i < orders.length; i++) {
+                    html += orderCardHtml(orders[i]);
+                }
+                container.innerHTML = html;
+                empty.classList.toggle('d-none', orders.length > 0);
+                count.classList.toggle('d-none', orders.length === 0);
+                count.textContent = orders.length + ' order' + (orders.length === 1 ? '' : 's');
+            }
+
+            /* Add order from QR hash */
+            var hash = location.hash;
+            if (hash && hash.indexOf('#order=') === 0) {
+                try {
+                    var incoming = decodeOrder(hash.substring('#order='.length));
+                    var exists = false;
+                    for (var i = 0; i < orders.length; i++) {
+                        if (orders[i].id === incoming.id) { exists = true; break; }
+                    }
+                    if (!exists) {
+                        orders.push(incoming);
+                        saveOrders();
+                    }
+                } catch (e) {
+                    /* invalid QR payload — ignore */
+                }
+            }
+
+            /* Mark order complete */
+            document.getElementById('baristaOrders').addEventListener('click', function (e) {
+                var btn = e.target.closest('[data-action="complete"]');
+                if (!btn) return;
+                var card = btn.closest('.barista-card');
+                card.classList.add('completed');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="bi bi-check-lg me-1"></i>Done';
+                setTimeout(function () {
+                    var id = card.getAttribute('data-id');
+                    for (var i = 0; i < orders.length; i++) {
+                        if (orders[i].id === id) { orders.splice(i, 1); break; }
+                    }
+                    saveOrders();
+                    render();
+                }, 900);
+            });
+
+            loadOrders();
+            render();
+        })();
+    </script>
+</body>
+</html>
