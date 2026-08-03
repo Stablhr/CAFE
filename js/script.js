@@ -197,24 +197,50 @@
     /* =============================================
        PRODUCT FILTERING
     ============================================= */
-    function applyFilter(filter) {
-        document.querySelectorAll('.filter-btn').forEach(function (b) {
-            b.classList.remove('active');
-            if (b.getAttribute('data-filter') === filter) b.classList.add('active');
+    function updateFilterCounts() {
+        var counts = {};
+        document.querySelectorAll('.product-card').forEach(function (card) {
+            var cat = card.getAttribute('data-category');
+            counts[cat] = (counts[cat] || 0) + 1;
         });
+        document.querySelectorAll('.pill-count').forEach(function (el) {
+            var cat = el.getAttribute('data-count');
+            el.textContent = cat === 'all' ? Object.values(counts).reduce(function (a, b) { return a + b; }, 0) : (counts[cat] || 0);
+        });
+    }
+
+    function setActiveFilter(filter) {
+        document.querySelectorAll('.filter-pill').forEach(function (b) {
+            var isActive = b.getAttribute('data-filter') === filter;
+            b.classList.toggle('active', isActive);
+            b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+        document.querySelectorAll('.dropdown-item[data-filter]').forEach(function (item) {
+            item.classList.toggle('active', item.getAttribute('data-filter') === filter);
+        });
+    }
+
+    function applyFilter(filter) {
+        setActiveFilter(filter);
+        var shownIndex = 0;
         document.querySelectorAll('.product-card').forEach(function (card) {
             var cat = card.getAttribute('data-category');
             if (filter === 'all' || cat === filter) {
                 card.classList.remove('hidden-card');
+                card.classList.remove('animated-in');
+                card.classList.add('filter-in');
+                var self = card;
+                setTimeout(function () { self.classList.add('animated-in'); }, shownIndex * 60);
+                shownIndex++;
             } else {
+                card.classList.remove('filter-in', 'animated-in');
                 card.classList.add('hidden-card');
             }
         });
     }
 
-    document.querySelectorAll('.filter-btn').forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
+    document.querySelectorAll('.filter-pill').forEach(function (btn) {
+        btn.addEventListener('click', function () {
             applyFilter(this.getAttribute('data-filter'));
         });
     });
@@ -224,6 +250,9 @@
             applyFilter(this.getAttribute('data-filter'));
         });
     });
+
+    updateFilterCounts();
+    setActiveFilter('all');
 
     /* =============================================
        SMOOTH SCROLL

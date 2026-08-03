@@ -104,19 +104,17 @@
                 <p class="section-subtitle">Every sip and bite is made to warm your soul.</p>
             </div>
 
-            <!-- Filter Dropdown -->
-            <div class="d-flex justify-content-center mb-4 animate-on-scroll">
-                <div class="dropdown">
-                    <button class="btn btn-filter dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-funnel-fill me-2"></i>Filter by Category
-                    </button>
-                    <ul class="dropdown-menu filter-menu">
-                        <li><button class="dropdown-item filter-btn active" data-filter="all">All Products</button></li>
-                        <li><button class="dropdown-item filter-btn" data-filter="coffee">Hot & Cold Coffee</button></li>
-                        <li><button class="dropdown-item filter-btn" data-filter="frappe">Frappé</button></li>
-                        <li><button class="dropdown-item filter-btn" data-filter="milktea">Milk Tea</button></li>
-                        <li><button class="dropdown-item filter-btn" data-filter="pastry">Pastries</button></li>
-                    </ul>
+            <!-- Filter Pills -->
+            <div class="filter-bar mb-4 animate-on-scroll">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="filter-label"><i class="bi bi-funnel-fill me-1"></i>Filter</span>
+                    <div class="filter-scroll" role="group" aria-label="Filter products by category">
+                        <button class="filter-pill active" data-filter="all" aria-pressed="true">All Products <span class="pill-count" data-count="all">0</span></button>
+                        <button class="filter-pill" data-filter="coffee" aria-pressed="false">Coffee <span class="pill-count" data-count="coffee">0</span></button>
+                        <button class="filter-pill" data-filter="frappe" aria-pressed="false">Frappé <span class="pill-count" data-count="frappe">0</span></button>
+                        <button class="filter-pill" data-filter="milktea" aria-pressed="false">Milk Tea <span class="pill-count" data-count="milktea">0</span></button>
+                        <button class="filter-pill" data-filter="pastry" aria-pressed="false">Pastries <span class="pill-count" data-count="pastry">0</span></button>
+                    </div>
                 </div>
             </div>
 
