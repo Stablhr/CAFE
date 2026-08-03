@@ -19,10 +19,26 @@
     var productImages = {
         'Hot Americano': 'assets/hotcold_coffee/hot_americano.png',
         'Iced Oreo Coffee Latte': 'assets/hotcold_coffee/iced_oreo_coffee_latte.png',
+        'Cold Brew Coffee': 'assets/hotcold_coffee/cold_brew_coffee.png',
+        'Iced Coffee with Milk': 'assets/hotcold_coffee/iced_coffee_with_ milk.png',
+        'Cookies & Cream': 'assets/hotcold_coffee/cookies_n_cream.png',
         'Taro Frappé': 'assets/frappe/taro.png',
+        'Mango Frappé': 'assets/frappe/mango.png',
+        'Dark Chocolate Frappé': 'assets/frappe/dark_chocolate.png',
+        'Red Velvet Frappé': 'assets/frappe/red_velvet.png',
+        'Salted Caramel Frappé': 'assets/frappe/salted_caramel.png',
+        'Strawberry Cheesecake Frappé': 'assets/frappe/strawberry_cheesecake.png',
         'Okinawa Milk Tea': 'assets/milk_tea/okinawa.png',
         'Wintermelon Milk Tea': 'assets/milk_tea/wintermelon.png',
-        'Cheesecake Slice': 'assets/pastries/cheesecake_slice.png'
+        'Hazelnut Milk Tea': 'assets/milk_tea/hazelnut.png',
+        'Hokkaido Milk Tea': 'assets/milk_tea/hokkaido.png',
+        'Salted Caramel Milk Tea': 'assets/milk_tea/salted_caramel.png',
+        'Taro Milk Tea': 'assets/milk_tea/taro.jpg',
+        'Cheesecake Slice': 'assets/pastries/cheesecake_slice.png',
+        'Muffin': 'assets/pastries/muffin.png',
+        'Banana Loaf': 'assets/pastries/banana_loaf.png',
+        'Red Velvet Cake Slice': 'assets/pastries/red_velvet_cake_slice.png',
+        'Triple Chocolate Slice': 'assets/pastries/tripple_chocolate_slice.png'
     };
 
     function getCardSelection(card) {
