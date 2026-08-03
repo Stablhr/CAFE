@@ -246,6 +246,42 @@ a {
     animation: badgeBump 0.3s ease;
 }
 
+/* Floating Recommend Button (AI Barista) */
+.recommend-float {
+    position: fixed;
+    left: 1.5rem;
+    bottom: 1.5rem;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    background: var(--terracotta);
+    color: var(--white);
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(222, 124, 84, 0.45);
+    transition: transform var(--transition), box-shadow var(--transition);
+    z-index: 1045;
+}
+
+.recommend-float:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 24px rgba(222, 124, 84, 0.55);
+}
+
+@media (max-width: 575.98px) {
+    .recommend-float {
+        left: 1rem;
+        bottom: 1rem;
+        width: 50px;
+        height: 50px;
+        font-size: 1.25rem;
+    }
+}
+
 @keyframes badgeBump {
     0%   { transform: scale(1); }
     50%  { transform: scale(1.4); }
