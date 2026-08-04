@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barista Queue — Grace & Glory</title>
+    <title>Barista Queue — Grace &amp; Glory</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,10 +20,15 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
+        /* ================= HEADER ================= */
         .barista-header {
             background: var(--navy);
             color: var(--ivory);
             padding: 0.9rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-md);
         }
 
         .barista-header .brand-text {
@@ -38,37 +43,150 @@
             padding: 0.4rem 0.9rem;
             border-radius: 999px;
             letter-spacing: 0.03em;
+            white-space: nowrap;
         }
 
+        .barista-clock {
+            font-variant-numeric: tabular-nums;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--peach);
+            white-space: nowrap;
+        }
+
+        .btn-icon {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: var(--ivory);
+            border-radius: 50px;
+            padding: 0.35rem 0.85rem;
+            font-size: 0.9rem;
+            transition: all var(--transition);
+            white-space: nowrap;
+        }
+
+        .btn-icon:hover {
+            background: var(--terracotta);
+            color: var(--white);
+            border-color: var(--terracotta);
+        }
+
+        /* ================= QUEUE STATS ================= */
+        .queue-stat {
+            background: var(--white);
+            border: 1px solid var(--peach);
+            border-radius: var(--radius-md);
+            padding: 0.65rem 1rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            height: 100%;
+            transition: transform var(--transition), box-shadow var(--transition);
+        }
+
+        .queue-stat:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .queue-stat .stat-ico {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            background: var(--peach-light);
+            color: var(--maroon);
+            flex-shrink: 0;
+        }
+
+        .queue-stat.terracotta .stat-ico { background: var(--terracotta); color: var(--white); }
+        .queue-stat.maroon .stat-ico { background: var(--maroon); color: var(--white); }
+        .queue-stat.navy .stat-ico { background: var(--navy); color: var(--white); }
+        .queue-stat.green .stat-ico { background: #4A7C59; color: var(--white); }
+
+        .queue-stat .stat-num {
+            font-family: 'Fraunces', serif;
+            font-weight: 900;
+            font-size: 1.4rem;
+            line-height: 1;
+            color: var(--maroon);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .queue-stat .stat-label {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--charcoal);
+            opacity: 0.6;
+            white-space: nowrap;
+        }
+
+        /* ================= EMPTY STATE ================= */
         .barista-empty {
             color: var(--charcoal);
             opacity: 0.75;
         }
 
-        .barista-empty i {
+        .cup-wrap {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.25rem;
+        }
+
+        .cup-wrap i {
             font-size: 3.5rem;
             color: var(--peach);
             display: block;
-            margin-bottom: 1rem;
         }
 
+        .steam {
+            position: absolute;
+            bottom: 92%;
+            width: 4px;
+            height: 22px;
+            border-radius: 50px;
+            background: linear-gradient(to top, rgba(222, 124, 84, 0), var(--peach));
+            opacity: 0;
+        }
+
+        .steam.s1 { left: 32%; animation: steamRise 2.2s ease-in-out infinite; }
+        .steam.s2 { left: 50%; animation: steamRise 2.2s ease-in-out 0.7s infinite; }
+        .steam.s3 { left: 68%; animation: steamRise 2.2s ease-in-out 1.4s infinite; }
+
+        @keyframes steamRise {
+            0%   { transform: translateY(0) scale(1); opacity: 0; }
+            30%  { opacity: 0.8; }
+            100% { transform: translateY(-20px) scale(1.5); opacity: 0; }
+        }
+
+        /* ================= ORDER CARDS ================= */
         .barista-card {
             background: var(--white);
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-md);
             border: 1px solid var(--peach);
-            transition: box-shadow var(--transition);
+            border-left: 6px solid var(--peach);
+            overflow: hidden;
+            transition: box-shadow var(--transition), transform var(--transition);
         }
 
-        .barista-card.completed {
-            opacity: 0.55;
-            filter: grayscale(1);
+        .barista-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
         }
+
+        .barista-card.status-received  { border-left-color: var(--terracotta); }
+        .barista-card.status-preparing { border-left-color: var(--maroon); }
+        .barista-card.status-ready     { border-left-color: #4A7C59; }
 
         .barista-card-header {
             background: var(--peach-light);
-            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-            padding: 0.9rem 1.1rem;
+            padding: 0.85rem 1.1rem;
             border-bottom: 1px dashed var(--peach);
         }
 
@@ -77,22 +195,139 @@
             font-weight: 900;
             color: var(--maroon);
             letter-spacing: 0.02em;
+            font-size: 1.05rem;
         }
 
         .barista-time {
-            font-size: 0.78rem;
+            font-size: 0.76rem;
             color: var(--charcoal);
-            opacity: 0.75;
+            opacity: 0.7;
         }
 
+        .barista-age {
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--charcoal);
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid var(--peach);
+            padding: 0.15rem 0.55rem;
+            border-radius: 50px;
+            display: inline-block;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .barista-age.age-warn {
+            color: #8a6516;
+            border-color: #e8c47a;
+            background: #fdf3da;
+        }
+
+        .barista-age.age-danger {
+            color: #a03226;
+            border-color: #e79a8a;
+            background: #fde8e3;
+            animation: ageBlink 1s ease infinite;
+        }
+
+        @keyframes ageBlink {
+            50% { opacity: 0.55; }
+        }
+
+        .next-up {
+            background: var(--terracotta);
+            color: var(--white);
+            font-size: 0.64rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.28rem 0.6rem;
+            border-radius: 50px;
+            display: inline-block;
+            margin-top: 0.4rem;
+            box-shadow: 0 3px 8px rgba(222, 124, 84, 0.35);
+        }
+
+        /* Status stepper */
+        .barista-stepper {
+            display: flex;
+            align-items: flex-start;
+            padding: 0.6rem 1.1rem;
+            background: var(--ivory);
+            border-bottom: 1px dashed var(--peach);
+        }
+
+        .barista-step-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .barista-step {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--peach);
+            color: var(--charcoal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            background: var(--white);
+            transition: all var(--transition);
+            flex-shrink: 0;
+        }
+
+        .barista-step.done {
+            background: var(--terracotta);
+            border-color: var(--terracotta);
+            color: var(--white);
+        }
+
+        .barista-step-label {
+            font-size: 0.58rem;
+            color: var(--charcoal);
+            opacity: 0.65;
+            white-space: nowrap;
+        }
+
+        .barista-step-line {
+            flex: 1;
+            height: 2px;
+            background: var(--peach-light);
+            margin-top: 11px;
+        }
+
+        .barista-step-line.done {
+            background: var(--terracotta);
+        }
+
+        /* Items */
         .barista-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
             padding: 0.55rem 1.1rem;
             border-bottom: 1px dashed var(--peach-light);
-            font-size: 0.92rem;
         }
 
         .barista-item:last-child {
             border-bottom: none;
+        }
+
+        .barista-thumb {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+            border: 1px solid var(--peach);
+            flex-shrink: 0;
+            background: var(--ivory);
+        }
+
+        .barista-item-info {
+            flex: 1;
+            min-width: 0;
         }
 
         .barista-qty {
@@ -108,19 +343,108 @@
             font-size: 0.85rem;
         }
 
+        .barista-item-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--charcoal);
+        }
+
         .barista-item-size {
             color: var(--terracotta);
-            font-size: 0.78rem;
+            font-size: 0.76rem;
         }
 
         .barista-item-price {
             font-weight: 600;
             white-space: nowrap;
+            font-size: 0.85rem;
+        }
+
+        /* Footer */
+        .barista-card-footer {
+            padding: 0.85rem 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px dashed var(--peach);
+            background: var(--ivory);
         }
 
         .barista-total {
+            font-family: 'Fraunces', serif;
+            font-weight: 900;
+            font-size: 1.15rem;
             color: var(--maroon);
-            font-weight: 700;
+            line-height: 1;
+        }
+
+        .barista-sub {
+            font-size: 0.72rem;
+            color: var(--charcoal);
+            opacity: 0.65;
+            margin-top: 0.15rem;
+        }
+
+        .btn-serve {
+            background: #4A7C59;
+            color: var(--white);
+            border: none;
+            padding: 0.45rem 1.1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.82rem;
+            transition: all var(--transition);
+            white-space: nowrap;
+        }
+
+        .btn-serve:hover {
+            background: #3f6b4d;
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 124, 89, 0.35);
+        }
+
+        /* ================= ANIMATIONS ================= */
+        .barista-new {
+            animation: cardEnter 0.55s cubic-bezier(0.2, 0.7, 0.3, 1),
+                       cardPulse 1.8s ease 0.15s 2;
+        }
+
+        @keyframes cardEnter {
+            from { opacity: 0; transform: translateY(18px) scale(0.95); }
+            to   { opacity: 1; transform: none; }
+        }
+
+        @keyframes cardPulse {
+            0%, 100% { box-shadow: var(--shadow-md); }
+            50%      { box-shadow: 0 0 0 6px var(--peach), var(--shadow-lg); }
+        }
+
+        .status-flash {
+            animation: cardFlash 0.8s ease;
+        }
+
+        @keyframes cardFlash {
+            0%, 100% { box-shadow: var(--shadow-md); }
+            50%      { box-shadow: 0 0 0 6px var(--peach), var(--shadow-lg); }
+        }
+
+        /* ================= CONFETTI ================= */
+        #confettiCanvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2000;
+            display: none;
+        }
+
+        @media (max-width: 575.98px) {
+            .barista-clock { display: none; }
+            .queue-stat { padding: 0.5rem 0.75rem; }
+            .queue-stat .stat-ico { width: 34px; height: 34px; font-size: 0.95rem; }
+            .queue-stat .stat-num { font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -128,27 +452,96 @@
 
     <!-- ==================== HEADER ==================== -->
     <header class="barista-header">
-        <div class="container d-flex justify-content-between align-items-center">
+        <div class="container d-flex justify-content-between align-items-center gap-2 flex-wrap">
             <span class="brand-text">Grace <span class="accent">&amp;</span> Glory</span>
-            <span class="barista-badge"><i class="bi bi-cup-hot me-1"></i>Barista View</span>
+            <div class="d-flex align-items-center gap-2">
+                <span class="barista-clock" id="baristaClock"></span>
+                <button class="btn-icon" id="btnMute" type="button" title="Mute sounds"></button>
+                <span class="barista-badge"><i class="bi bi-cup-hot me-1"></i>Barista View</span>
+            </div>
         </div>
     </header>
 
     <!-- ==================== ORDER QUEUE ==================== -->
     <main class="container py-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
             <h1 class="display-font section-title mb-0">Order <span class="accent-text">Queue</span></h1>
-            <span class="badge text-bg-warning d-none" id="baristaCount"></span>
+            <button class="btn btn-outline-accent btn-sm" id="btnClearReady" type="button">
+                <i class="bi bi-check2-all me-1"></i>Clear Ready
+            </button>
+        </div>
+
+        <!-- Live stats -->
+        <div class="row g-2 mb-3">
+            <div class="col-6 col-md-3">
+                <div class="queue-stat">
+                    <div class="stat-ico"><i class="bi bi-bag-check"></i></div>
+                    <div>
+                        <div class="stat-num" id="statQueue">0</div>
+                        <div class="stat-label">To Make</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="queue-stat terracotta">
+                    <div class="stat-ico"><i class="bi bi-fire"></i></div>
+                    <div>
+                        <div class="stat-num" id="statPreparing">0</div>
+                        <div class="stat-label">Preparing</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="queue-stat green">
+                    <div class="stat-ico"><i class="bi bi-bell"></i></div>
+                    <div>
+                        <div class="stat-num" id="statReady">0</div>
+                        <div class="stat-label">Ready</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="queue-stat maroon">
+                    <div class="stat-ico"><i class="bi bi-cash-coin"></i></div>
+                    <div>
+                        <div class="stat-num" id="statRevenue">&#8369;0</div>
+                        <div class="stat-label">Queue Value</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-bar mb-3">
+            <div class="filter-scroll">
+                <span class="filter-label">View:</span>
+                <button class="filter-pill active" data-filter="all" aria-pressed="true">
+                    All <span class="pill-count" data-count="all">0</span>
+                </button>
+                <button class="filter-pill" data-filter="active" aria-pressed="false">
+                    To Make <span class="pill-count" data-count="active">0</span>
+                </button>
+                <button class="filter-pill" data-filter="ready" aria-pressed="false">
+                    Ready <span class="pill-count" data-count="ready">0</span>
+                </button>
+            </div>
         </div>
 
         <div class="barista-empty text-center py-5" id="baristaEmpty">
-            <i class="bi bi-qr-code-scan"></i>
+            <div class="cup-wrap">
+                <i class="bi bi-cup-hot"></i>
+                <span class="steam s1"></span>
+                <span class="steam s2"></span>
+                <span class="steam s3"></span>
+            </div>
             <h2 class="display-font">Waiting for orders</h2>
-            <p class="mb-0">Customers will scan their order QR code to send it here.<br>Keep this page open on the counter.</p>
+            <p class="mb-0">New orders appear here the moment a customer checks out.<br>Keep this page open on the counter.</p>
         </div>
 
         <div class="row g-3" id="baristaOrders"></div>
     </main>
+
+    <canvas id="confettiCanvas"></canvas>
 
     <!-- Bootstrap 5.3 JS Bundle (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -158,21 +551,50 @@
             'use strict';
 
             var STORAGE_KEY = 'gg_barista_queue';
-            var orders = [];
+            var MUTE_KEY = 'gg_barista_mute';
 
-            function loadOrders() {
-                try {
-                    var raw = sessionStorage.getItem(STORAGE_KEY);
-                    orders = raw ? JSON.parse(raw) : [];
-                } catch (e) {
-                    orders = [];
-                }
+            var orders = [];
+            var knownIds = {};
+            var activeFilter = 'all';
+            var muted = false;
+
+            var container = document.getElementById('baristaOrders');
+            var empty = document.getElementById('baristaEmpty');
+            var confettiCanvas = document.getElementById('confettiCanvas');
+
+            var productImages = {
+                'Hot Americano': 'assets/hotcold_coffee/hot_americano.png',
+                'Iced Oreo Coffee Latte': 'assets/hotcold_coffee/iced_oreo_coffee_latte.png',
+                'Cold Brew Coffee': 'assets/hotcold_coffee/cold_brew_coffee.png',
+                'Iced Coffee with Milk': 'assets/hotcold_coffee/iced_coffee_with_ milk.png',
+                'Cookies & Cream': 'assets/hotcold_coffee/cookies_n_cream.png',
+                'Taro Frappé': 'assets/frappe/taro.png',
+                'Mango Frappé': 'assets/frappe/mango.png',
+                'Dark Chocolate Frappé': 'assets/frappe/dark_chocolate.png',
+                'Red Velvet Frappé': 'assets/frappe/red_velvet.png',
+                'Salted Caramel Frappé': 'assets/frappe/salted_caramel.png',
+                'Strawberry Cheesecake Frappé': 'assets/frappe/strawberry_cheesecake.png',
+                'Okinawa Milk Tea': 'assets/milk_tea/okinawa.png',
+                'Wintermelon Milk Tea': 'assets/milk_tea/wintermelon.png',
+                'Hazelnut Milk Tea': 'assets/milk_tea/hazelnut.png',
+                'Hokkaido Milk Tea': 'assets/milk_tea/hokkaido.png',
+                'Salted Caramel Milk Tea': 'assets/milk_tea/salted_caramel.png',
+                'Taro Milk Tea': 'assets/milk_tea/taro.jpg',
+                'Cheesecake Slice': 'assets/pastries/cheesecake_slice.png',
+                'Muffin': 'assets/pastries/muffin.png',
+                'Banana Loaf': 'assets/pastries/banana_loaf.png',
+                'Red Velvet Cake Slice': 'assets/pastries/red_velvet_cake_slice.png',
+                'Triple Chocolate Slice': 'assets/pastries/tripple_chocolate_slice.png'
+            };
+
+            function readStorage() {
+                try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+                catch (e) { return []; }
             }
 
             function saveOrders() {
-                try {
-                    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
-                } catch (e) { /* ignore quota/security errors */ }
+                try { localStorage.setItem(STORAGE_KEY, JSON.stringify(orders)); }
+                catch (e) { /* ignore quota/security errors */ }
             }
 
             function decodeOrder(encoded) {
@@ -189,81 +611,432 @@
                 return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
             }
 
-            function orderCardHtml(order) {
+            function elapsedLabel(iso) {
+                var diff = Math.max(0, Math.floor((Date.now() - new Date(iso)) / 1000));
+                if (diff < 60) return diff + 's ago';
+                var m = Math.floor(diff / 60);
+                var s = diff % 60;
+                if (m < 60) return m + 'm ' + s + 's';
+                var h = Math.floor(m / 60);
+                return h + 'h ' + (m % 60) + 'm';
+            }
+
+            function ageClass(iso) {
+                var diff = Math.floor((Date.now() - new Date(iso)) / 1000);
+                if (diff >= 600) return 'age-danger';
+                if (diff >= 300) return 'age-warn';
+                return '';
+            }
+
+            function statusIndex(order) {
+                if (order.status === 'ready') return 2;
+                if (order.status === 'preparing') return 1;
+                return 0;
+            }
+
+            function isOldestActive(id) {
+                var oldest = null;
+                for (var i = 0; i < orders.length; i++) {
+                    if (orders[i].status !== 'ready') {
+                        if (!oldest || new Date(orders[i].placed) < new Date(oldest.placed)) oldest = orders[i];
+                    }
+                }
+                return !!(oldest && oldest.id === id);
+            }
+
+            function sortedOrders() {
+                var arr = orders.slice().sort(function (a, b) {
+                    return new Date(a.placed) - new Date(b.placed);
+                });
+                var active = [];
+                var ready = [];
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i].status === 'ready') ready.push(arr[i]);
+                    else active.push(arr[i]);
+                }
+                return active.concat(ready);
+            }
+
+            function filteredOrders() {
+                var sorted = sortedOrders();
+                if (activeFilter === 'active') {
+                    return sorted.filter(function (o) { return o.status !== 'ready'; });
+                }
+                if (activeFilter === 'ready') {
+                    return sorted.filter(function (o) { return o.status === 'ready'; });
+                }
+                return sorted;
+            }
+
+            function orderCardHtml(order, isNew) {
                 var items = '';
                 for (var i = 0; i < order.items.length; i++) {
                     var it = order.items[i];
+                    var img = productImages[it.name] || 'assets/hotcold_coffee/hot_americano.png';
                     var lineTotal = it.price * it.qty;
-                    items += '<div class="barista-item d-flex justify-content-between align-items-center">' +
+                    items += '<div class="barista-item">' +
+                        '<img class="barista-thumb" src="' + img + '" alt="' + it.name + '">' +
+                        '<div class="barista-item-info">' +
                         '<div><span class="barista-qty">' + it.qty + '</span>' +
-                        '<strong>' + it.name + '</strong>' +
+                        '<span class="barista-item-name">' + it.name + '</span></div>' +
                         '<div class="barista-item-size">' + it.size + '</div></div>' +
                         '<span class="barista-item-price">&#8369;' + lineTotal + '</span></div>';
                 }
+
+                var idx = statusIndex(order);
+                var stepDefs = [
+                    { icon: 'bi-bag-check', label: 'Received' },
+                    { icon: 'bi-fire', label: 'Preparing' },
+                    { icon: 'bi-check2-circle', label: 'Ready' }
+                ];
+                var stepper = '';
+                for (var s = 0; s < 3; s++) {
+                    stepper += '<div class="barista-step-wrap">' +
+                        '<div class="barista-step' + (s <= idx ? ' done' : '') + '"><i class="bi ' + stepDefs[s].icon + '"></i></div>' +
+                        '<div class="barista-step-label">' + stepDefs[s].label + '</div></div>';
+                    if (s < 2) {
+                        stepper += '<div class="barista-step-line' + (s < idx ? ' done' : '') + '"></div>';
+                    }
+                }
+
+                var nextUp = '';
+                if (order.status !== 'ready' && isOldestActive(order.id)) {
+                    nextUp = '<span class="next-up"><i class="bi bi-lightning-charge-fill me-1"></i>Next Up</span>';
+                }
+
+                var action = '';
+                if (order.status === 'preparing') {
+                    action = '<button type="button" class="btn btn-outline-accent btn-sm" data-action="ready">' +
+                        '<i class="bi bi-bell me-1"></i>Mark Ready</button>';
+                } else if (order.status === 'ready') {
+                    action = '<button type="button" class="btn-serve btn-sm" data-action="serve">' +
+                        '<i class="bi bi-check2-all me-1"></i>Serve Order</button>';
+                } else {
+                    action = '<button type="button" class="btn btn-accent btn-sm" data-action="start">' +
+                        '<i class="bi bi-fire me-1"></i>Start Making</button>';
+                }
+
+                var count = 0;
+                for (var c = 0; c < order.items.length; c++) count += order.items[c].qty;
+
                 return '<div class="col-md-6 col-xl-4">' +
-                    '<div class="barista-card h-100" data-id="' + order.id + '">' +
-                    '<div class="barista-card-header d-flex justify-content-between align-items-center">' +
-                    '<span class="barista-order-id">' + order.id + '</span>' +
-                    '<span class="barista-time">' + timeLabel(order.placed) + '</span></div>' +
+                    '<div class="barista-card status-' + (order.status || 'received') + ' h-100' +
+                    (isNew ? ' barista-new' : '') + '" data-id="' + order.id + '">' +
+                    '<div class="barista-card-header d-flex justify-content-between align-items-start">' +
+                    '<div>' +
+                    '<div class="barista-order-id">' + order.id + '</div>' +
+                    '<div class="barista-time"><i class="bi bi-clock me-1"></i>' + timeLabel(order.placed) + '</div>' +
+                    '</div>' +
+                    '<div class="text-end">' +
+                    '<span class="barista-age ' + ageClass(order.placed) + '">' + elapsedLabel(order.placed) + '</span>' +
+                    nextUp +
+                    '</div></div>' +
+                    '<div class="barista-stepper">' + stepper + '</div>' +
                     '<div>' + items + '</div>' +
-                    '<div class="p-3 d-flex justify-content-between align-items-center">' +
-                    '<span class="barista-total">Total: &#8369;' + order.total + '</span>' +
-                    '<button type="button" class="btn btn-accent btn-sm" data-action="complete">Complete</button>' +
+                    '<div class="barista-card-footer">' +
+                    '<div>' +
+                    '<div class="barista-total">&#8369;' + order.total + '</div>' +
+                    '<div class="barista-sub">' + count + ' item' + (count === 1 ? '' : 's') + '</div>' +
+                    '</div>' +
+                    action +
                     '</div></div></div>';
             }
 
-            function render() {
-                var container = document.getElementById('baristaOrders');
-                var empty = document.getElementById('baristaEmpty');
-                var count = document.getElementById('baristaCount');
-                var html = '';
+            function updateMeta() {
+                var toMake = 0;
+                var preparing = 0;
+                var ready = 0;
+                var revenue = 0;
                 for (var i = 0; i < orders.length; i++) {
-                    html += orderCardHtml(orders[i]);
+                    var o = orders[i];
+                    revenue += o.total || 0;
+                    if (o.status === 'ready') ready++;
+                    else if (o.status === 'preparing') { preparing++; toMake++; }
+                    else toMake++;
+                }
+                document.getElementById('statQueue').textContent = toMake;
+                document.getElementById('statPreparing').textContent = preparing;
+                document.getElementById('statReady').textContent = ready;
+                document.getElementById('statRevenue').textContent = '\u20B1' + revenue;
+
+                var total = orders.length;
+                document.querySelectorAll('.filter-pill .pill-count').forEach(function (el) {
+                    var key = el.getAttribute('data-count');
+                    el.textContent = key === 'all' ? total : key === 'active' ? toMake : ready;
+                });
+
+                empty.classList.toggle('d-none', orders.length > 0);
+            }
+
+            function render() {
+                var list = filteredOrders();
+                var html = '';
+                var fresh = false;
+                for (var i = 0; i < list.length; i++) {
+                    var o = list[i];
+                    var isNew = !knownIds[o.id];
+                    if (isNew) fresh = true;
+                    html += orderCardHtml(o, isNew);
+                    knownIds[o.id] = true;
                 }
                 container.innerHTML = html;
-                empty.classList.toggle('d-none', orders.length > 0);
-                count.classList.toggle('d-none', orders.length === 0);
-                count.textContent = orders.length + ' order' + (orders.length === 1 ? '' : 's');
+                updateMeta();
+                return fresh;
             }
 
-            /* Add order from QR hash */
-            var hash = location.hash;
-            if (hash && hash.indexOf('#order=') === 0) {
+            function flashCard(id) {
+                var el = container.querySelector('.barista-card[data-id="' + id + '"]');
+                if (!el) return;
+                el.classList.add('status-flash');
+                setTimeout(function () { el.classList.remove('status-flash'); }, 800);
+            }
+
+            function findIndex(id) {
+                for (var i = 0; i < orders.length; i++) {
+                    if (orders[i].id === id) return i;
+                }
+                return -1;
+            }
+
+            function setStatus(id, status) {
+                var i = findIndex(id);
+                if (i < 0) return;
+                orders[i].status = status;
+                saveOrders();
+                render();
+                flashCard(id);
+                if (status === 'ready') playReadyChime();
+            }
+
+            function removeOrder(id) {
+                var i = findIndex(id);
+                if (i < 0) return;
+                orders.splice(i, 1);
+                saveOrders();
+                render();
+            }
+
+            function addFromHash() {
+                var hash = location.hash;
+                if (!hash || hash.indexOf('#order=') !== 0) return false;
                 try {
                     var incoming = decodeOrder(hash.substring('#order='.length));
-                    var exists = false;
+                    incoming.status = incoming.status || 'received';
                     for (var i = 0; i < orders.length; i++) {
-                        if (orders[i].id === incoming.id) { exists = true; break; }
+                        if (orders[i].id === incoming.id) return false;
                     }
-                    if (!exists) {
-                        orders.push(incoming);
-                        saveOrders();
-                    }
+                    orders.push(incoming);
+                    saveOrders();
+                    return true;
                 } catch (e) {
-                    /* invalid QR payload — ignore */
+                    return false;
                 }
             }
 
-            /* Mark order complete */
-            document.getElementById('baristaOrders').addEventListener('click', function (e) {
-                var btn = e.target.closest('[data-action="complete"]');
+            /* ================= SOUND ================= */
+            var audioCtx = null;
+            function ctx() {
+                if (!audioCtx) {
+                    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+                    catch (e) { audioCtx = null; }
+                }
+                if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+                return audioCtx;
+            }
+
+            function tone(freqs, dur) {
+                var c = ctx();
+                if (!c || muted) return;
+                var now = c.currentTime;
+                freqs.forEach(function (f, i) {
+                    var osc = c.createOscillator();
+                    var gain = c.createGain();
+                    var t = now + i * 0.14;
+                    osc.type = 'sine';
+                    osc.frequency.value = f;
+                    gain.gain.setValueAtTime(0.0001, t);
+                    gain.gain.exponentialRampToValueAtTime(0.14, t + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+                    osc.connect(gain).connect(c.destination);
+                    osc.start(t);
+                    osc.stop(t + dur + 0.05);
+                });
+            }
+
+            function playChime()      { tone([523.25, 659.25, 783.99], 0.5); }
+            function playReadyChime() { tone([659.25, 783.99, 987.77], 0.45); }
+            function playServeChime() { tone([783.99, 1046.5], 0.4); }
+
+            /* ================= CONFETTI ================= */
+            function burstConfetti(x, y) {
+                var ctx2 = confettiCanvas.getContext('2d');
+                confettiCanvas.width = window.innerWidth;
+                confettiCanvas.height = window.innerHeight;
+                var colors = ['#DE7C54', '#F3CBAF', '#7A2E22', '#1F2E3A', '#C96A44', '#4A7C59'];
+                var parts = [];
+                for (var i = 0; i < 140; i++) {
+                    var angle = Math.random() * Math.PI * 2;
+                    var speed = Math.random() * 11 + 3;
+                    parts.push({
+                        x: x,
+                        y: y,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed - 6,
+                        g: 0.32,
+                        size: Math.random() * 7 + 3,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        rot: Math.random() * Math.PI * 2,
+                        vr: (Math.random() - 0.5) * 0.5,
+                        life: Math.random() * 40 + 50
+                    });
+                }
+                confettiCanvas.style.display = 'block';
+                var start = null;
+                function frame(t) {
+                    if (!start) start = t;
+                    ctx2.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+                    for (var i = 0; i < parts.length; i++) {
+                        var p = parts[i];
+                        p.vy += p.g;
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.vx *= 0.985;
+                        p.rot += p.vr;
+                        p.life--;
+                        if (p.life > 0) {
+                            ctx2.save();
+                            ctx2.globalAlpha = Math.min(1, p.life / 30);
+                            ctx2.translate(p.x, p.y);
+                            ctx2.rotate(p.rot);
+                            ctx2.fillStyle = p.color;
+                            ctx2.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+                            ctx2.restore();
+                        }
+                    }
+                    if (start && t - start < 1600) requestAnimationFrame(frame);
+                    else {
+                        ctx2.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+                        confettiCanvas.style.display = 'none';
+                    }
+                }
+                requestAnimationFrame(frame);
+            }
+
+            /* ================= EVENTS ================= */
+
+            /* Order card actions */
+            container.addEventListener('click', function (e) {
+                var btn = e.target.closest('[data-action]');
                 if (!btn) return;
                 var card = btn.closest('.barista-card');
-                card.classList.add('completed');
-                btn.disabled = true;
-                btn.innerHTML = '<i class="bi bi-check-lg me-1"></i>Done';
-                setTimeout(function () {
-                    var id = card.getAttribute('data-id');
-                    for (var i = 0; i < orders.length; i++) {
-                        if (orders[i].id === id) { orders.splice(i, 1); break; }
-                    }
-                    saveOrders();
-                    render();
-                }, 900);
+                var id = card.getAttribute('data-id');
+                var action = btn.getAttribute('data-action');
+                if (action === 'start') {
+                    setStatus(id, 'preparing');
+                } else if (action === 'ready') {
+                    setStatus(id, 'ready');
+                } else if (action === 'serve') {
+                    var rect = card.getBoundingClientRect();
+                    burstConfetti(rect.left + rect.width / 2, rect.top + rect.height / 2);
+                    playServeChime();
+                    removeOrder(id);
+                }
             });
 
-            loadOrders();
-            render();
+            /* Filters */
+            document.querySelectorAll('.filter-pill').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    activeFilter = this.getAttribute('data-filter');
+                    document.querySelectorAll('.filter-pill').forEach(function (b) {
+                        var on = b.getAttribute('data-filter') === activeFilter;
+                        b.classList.toggle('active', on);
+                        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+                    });
+                    render();
+                });
+            });
+
+            /* Clear ready */
+            document.getElementById('btnClearReady').addEventListener('click', function () {
+                var hadReady = orders.some(function (o) { return o.status === 'ready'; });
+                if (!hadReady) return;
+                orders = orders.filter(function (o) { return o.status !== 'ready'; });
+                saveOrders();
+                render();
+                playServeChime();
+            });
+
+            /* Mute toggle */
+            var muteBtn = document.getElementById('btnMute');
+            function syncMute() {
+                muted = localStorage.getItem(MUTE_KEY) === '1';
+                muteBtn.innerHTML = muted
+                    ? '<i class="bi bi-volume-mute-fill me-1"></i>Muted'
+                    : '<i class="bi bi-volume-up-fill me-1"></i>Sound';
+                muteBtn.title = muted ? 'Unmute sounds' : 'Mute sounds';
+            }
+            muteBtn.addEventListener('click', function () {
+                localStorage.setItem(MUTE_KEY, muted ? '0' : '1');
+                syncMute();
+                playChime();
+            });
+            syncMute();
+
+            /* Unlock audio on first interaction */
+            document.addEventListener('pointerdown', function () { ctx(); }, { once: true });
+
+            /* Live incoming orders (another tab / same browser) */
+            window.addEventListener('storage', function (e) {
+                if (e.key !== null && e.key !== STORAGE_KEY) return;
+                var next = readStorage();
+                var fresh = next.some(function (o) { return !knownIds[o.id]; });
+                orders = next;
+                for (var i = 0; i < orders.length; i++) orders[i].status = orders[i].status || 'received';
+                if (render() && fresh) playChime();
+            });
+
+            /* Live incoming orders (QR hash change) */
+            window.addEventListener('hashchange', function () {
+                if (addFromHash()) {
+                    render();
+                    playChime();
+                }
+            });
+
+            /* Live clock + age counters */
+            var clockEl = document.getElementById('baristaClock');
+            setInterval(function () {
+                if (clockEl) {
+                    clockEl.textContent = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' });
+                }
+                var cards = container.querySelectorAll('.barista-card');
+                for (var i = 0; i < cards.length; i++) {
+                    var id = cards[i].getAttribute('data-id');
+                    var o = null;
+                    for (var j = 0; j < orders.length; j++) {
+                        if (orders[j].id === id) { o = orders[j]; break; }
+                    }
+                    if (!o) continue;
+                    var ageEl = cards[i].querySelector('.barista-age');
+                    if (ageEl) {
+                        ageEl.textContent = elapsedLabel(o.placed);
+                        ageEl.className = 'barista-age ' + ageClass(o.placed);
+                    }
+                }
+            }, 1000);
+
+            /* ================= INIT ================= */
+            orders = readStorage();
+            for (var i = 0; i < orders.length; i++) {
+                orders[i].status = orders[i].status || 'received';
+                knownIds[orders[i].id] = true;
+            }
+            if (addFromHash()) {
+                render();
+                playChime();
+            } else {
+                render();
+            }
         })();
     </script>
 </body>

@@ -194,6 +194,21 @@
         return dir + 'barista.html#order=' + encoded;
     }
 
+    function pushOrderToBaristaQueue(order) {
+        try {
+            var key = 'gg_barista_queue';
+            var list = JSON.parse(localStorage.getItem(key) || '[]');
+            var exists = false;
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].id === order.id) { exists = true; break; }
+            }
+            if (!exists) {
+                list.push(order);
+                localStorage.setItem(key, JSON.stringify(list));
+            }
+        } catch (e) { /* ignore storage errors */ }
+    }
+
     var lastCheckoutLink = '';
     var btnCopyLink = document.getElementById('btnCopyOrderLink');
 
@@ -250,6 +265,7 @@
             var toastEl = document.getElementById('checkoutToast');
             var toast = new bootstrap.Toast(toastEl, { delay: 5000 });
             toast.show();
+            pushOrderToBaristaQueue(order);
             showCheckoutModal(order);
             clearCart();
         });
