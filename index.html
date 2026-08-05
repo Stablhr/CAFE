@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grace & Glory — Café</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,7 +50,7 @@
             </div>
 
             <!-- Cart Icon -->
-            <button class="cart-btn d-none d-lg-flex" id="cartToggle" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas" aria-label="View cart">
+            <button class="cart-btn" id="cartToggle" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas" aria-label="View cart">
                 <i class="bi bi-bag-fill"></i>
                 <span class="cart-badge" id="cartBadge">0</span>
             </button>
@@ -1073,6 +1078,9 @@
                     <div class="text-center mb-3">
                         <i class="bi bi-check-circle-fill text-success" style="font-size: 2.4rem;"></i>
                         <p class="mb-0 mt-2">Show this code to the barista and we'll start making your order.</p>
+                    </div>
+                    <div class="checkout-staff-note text-center mb-3">
+                        <i class="bi bi-shield-lock me-1"></i>This code is for the barista only — keep it private until you're at the counter.
                     </div>
                     <div class="checkout-qr-wrap mb-3">
                         <div class="checkout-qr" id="checkoutQr"></div>

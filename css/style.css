@@ -1389,6 +1389,15 @@ a {
     border-radius: var(--radius-md);
 }
 
+.checkout-staff-note {
+    font-size: 0.8rem;
+    color: var(--maroon);
+    background: var(--peach-light);
+    border: 1px solid var(--peach);
+    border-radius: var(--radius-md);
+    padding: 0.55rem 0.9rem;
+}
+
 .checkout-qr img,
 .checkout-qr canvas {
     display: block;

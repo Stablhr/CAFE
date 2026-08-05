@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Barista Queue — Grace &amp; Glory</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -69,6 +74,100 @@
             background: var(--terracotta);
             color: var(--white);
             border-color: var(--terracotta);
+        }
+
+        /* ================= LOCK SCREEN ================= */
+        body.locked {
+            overflow: hidden;
+        }
+
+        .barista-lock {
+            position: fixed;
+            inset: 0;
+            z-index: 3000;
+            background: var(--navy);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .barista-lock-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--peach);
+            padding: 2.2rem 2rem;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .barista-lock-card h2 {
+            color: var(--maroon);
+            margin-bottom: 0.35rem;
+        }
+
+        .barista-lock-sub {
+            color: var(--charcoal);
+            opacity: 0.75;
+            font-size: 0.9rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .barista-lock-input input {
+            font-size: 1.4rem;
+            letter-spacing: 0.5em;
+            text-align: center;
+            border: 2px solid var(--peach);
+            border-radius: var(--radius-md);
+            height: 52px;
+            margin-bottom: 1rem;
+        }
+
+        .barista-lock-input input:focus {
+            border-color: var(--terracotta);
+            box-shadow: 0 0 0 0.25rem rgba(222, 124, 84, 0.15);
+        }
+
+        .barista-lock-err {
+            color: #a03226;
+            background: #fde8e3;
+            border: 1px solid #e79a8a;
+            border-radius: var(--radius-sm);
+            padding: 0.4rem 0.6rem;
+            font-size: 0.85rem;
+            display: none;
+            margin-bottom: 0.85rem;
+        }
+
+        .barista-lock-err.show {
+            display: block;
+        }
+
+        .barista-lock-tip {
+            font-size: 0.82rem;
+            color: var(--charcoal);
+            opacity: 0.7;
+            margin-top: 0.75rem;
+            text-decoration: none;
+        }
+
+        .barista-lock-tip:hover {
+            opacity: 1;
+            color: var(--terracotta);
+        }
+
+        .shake {
+            animation: lockShake 0.4s ease;
+        }
+
+        @keyframes lockShake {
+            0%, 100% { transform: translateX(0); }
+            20%      { transform: translateX(-8px); }
+            40%      { transform: translateX(8px); }
+            60%      { transform: translateX(-5px); }
+            80%      { transform: translateX(5px); }
         }
 
         /* ================= QUEUE STATS ================= */
@@ -450,12 +549,34 @@
 </head>
 <body>
 
+    <!-- ==================== LOCK SCREEN ==================== -->
+    <div class="barista-lock" id="baristaLock">
+        <div class="barista-lock-card">
+            <div class="cup-wrap">
+                <i class="bi bi-cup-hot"></i>
+                <span class="steam s1"></span>
+                <span class="steam s2"></span>
+                <span class="steam s3"></span>
+            </div>
+            <h2 class="display-font">Staff Only</h2>
+            <p class="barista-lock-sub">Enter the barista PIN to view the order queue.</p>
+            <div class="barista-lock-input">
+                <input type="password" id="pinInput" class="form-control" inputmode="numeric" maxlength="8" autocomplete="off" spellcheck="false" placeholder="Enter PIN" aria-label="Barista PIN">
+            </div>
+            <p class="barista-lock-err" id="pinError" role="alert"></p>
+            <button type="button" class="btn btn-accent btn-lg w-100" id="btnUnlock">Unlock Queue <i class="bi bi-cup-hot ms-1"></i></button>
+            <p class="barista-lock-tip mb-0" id="firstPinTip" style="display: none;"></p>
+        </div>
+    </div>
+
     <!-- ==================== HEADER ==================== -->
     <header class="barista-header">
         <div class="container d-flex justify-content-between align-items-center gap-2 flex-wrap">
             <span class="brand-text">Grace <span class="accent">&amp;</span> Glory</span>
             <div class="d-flex align-items-center gap-2">
                 <span class="barista-clock" id="baristaClock"></span>
+                <button class="btn-icon" id="btnChangePin" type="button" title="Change PIN" style="display: none;"><i class="bi bi-key me-1"></i>PIN</button>
+                <button class="btn-icon" id="btnLock" type="button" title="Lock the queue" style="display: none;"><i class="bi bi-lock-fill me-1"></i>Lock</button>
                 <button class="btn-icon" id="btnMute" type="button" title="Mute sounds"></button>
                 <span class="barista-badge"><i class="bi bi-cup-hot me-1"></i>Barista View</span>
             </div>
@@ -540,6 +661,37 @@
 
         <div class="row g-3" id="baristaOrders"></div>
     </main>
+
+    <!-- ==================== CHANGE PIN MODAL ==================== -->
+    <div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title display-font" id="pinModalLabel">Change <span class="accent-text">PIN</span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="pinCurrent" class="form-label">Current PIN</label>
+                        <input type="password" inputmode="numeric" class="form-control" id="pinCurrent" autocomplete="off" maxlength="8" placeholder="Current PIN">
+                    </div>
+                    <div class="mb-3">
+                        <label for="pinNew" class="form-label">New PIN</label>
+                        <input type="password" inputmode="numeric" class="form-control" id="pinNew" autocomplete="off" maxlength="8" placeholder="4–8 digits">
+                    </div>
+                    <div class="mb-2">
+                        <label for="pinConfirm" class="form-label">Confirm New PIN</label>
+                        <input type="password" inputmode="numeric" class="form-control" id="pinConfirm" autocomplete="off" maxlength="8" placeholder="Re-enter new PIN">
+                    </div>
+                    <p class="barista-lock-err" id="pinChangeError" role="alert"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-accent btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-accent btn-sm" id="btnSavePin">Save PIN</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <canvas id="confettiCanvas"></canvas>
 
@@ -1025,6 +1177,137 @@
                 }
             }, 1000);
 
+            /* ================= LOCK / PIN ================= */
+            var PIN_KEY = 'gg_barista_pin';
+            var PIN_SET_KEY = 'gg_barista_pin_set';
+            var SESSION_KEY = 'gg_barista_session';
+            var SESSION_HOURS = 8;
+            var DEFAULT_PIN = '2468';
+
+            var lockEl = document.getElementById('baristaLock');
+            var pinInput = document.getElementById('pinInput');
+            var pinError = document.getElementById('pinError');
+            var btnUnlock = document.getElementById('btnUnlock');
+            var btnLock = document.getElementById('btnLock');
+            var btnChangePin = document.getElementById('btnChangePin');
+            var firstPinTip = document.getElementById('firstPinTip');
+            var pinCurrent = document.getElementById('pinCurrent');
+            var pinNew = document.getElementById('pinNew');
+            var pinConfirm = document.getElementById('pinConfirm');
+            var pinChangeError = document.getElementById('pinChangeError');
+            var btnSavePin = document.getElementById('btnSavePin');
+
+            function storedPin() {
+                try { return localStorage.getItem(PIN_KEY); }
+                catch (e) { return null; }
+            }
+
+            function pinWasSet() {
+                try { return localStorage.getItem(PIN_SET_KEY) === '1'; }
+                catch (e) { return false; }
+            }
+
+            function seedDefaultPin() {
+                if (!storedPin()) {
+                    try { localStorage.setItem(PIN_KEY, DEFAULT_PIN); } catch (e) { /* ignore */ }
+                }
+            }
+
+            function isLocked() {
+                var ts = 0;
+                try { ts = parseInt(localStorage.getItem(SESSION_KEY), 10) || 0; } catch (e) { /* ignore */ }
+                return (Date.now() - ts) > SESSION_HOURS * 3600 * 1000;
+            }
+
+            function applyLock() {
+                var locked = isLocked();
+                document.body.classList.toggle('locked', locked);
+                if (lockEl) lockEl.style.display = locked ? 'flex' : 'none';
+                if (btnChangePin) btnChangePin.style.display = locked ? 'none' : 'inline-flex';
+                if (btnLock) btnLock.style.display = locked ? 'none' : 'inline-flex';
+                if (!locked && pinInput) pinInput.value = '';
+            }
+
+            function lock() {
+                try { localStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ }
+                applyLock();
+                if (pinInput) pinInput.focus();
+            }
+
+            function unlock() {
+                try { localStorage.setItem(SESSION_KEY, String(Date.now())); } catch (e) { /* ignore */ }
+                applyLock();
+            }
+
+            function showPinError(msg) {
+                pinError.textContent = msg;
+                pinError.classList.add('show');
+                var card = lockEl.querySelector('.barista-lock-card');
+                card.classList.remove('shake');
+                void card.offsetWidth;
+                card.classList.add('shake');
+            }
+
+            function tryUnlock() {
+                var entered = (pinInput.value || '').trim();
+                if (!entered) { showPinError('Please enter the PIN.'); pinInput.focus(); return; }
+                if (entered === storedPin()) {
+                    pinError.textContent = '';
+                    pinError.classList.remove('show');
+                    unlock();
+                } else {
+                    showPinError('Incorrect PIN. Try again.');
+                    pinInput.value = '';
+                    pinInput.focus();
+                }
+            }
+
+            if (btnUnlock) btnUnlock.addEventListener('click', tryUnlock);
+            if (pinInput) pinInput.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') { e.preventDefault(); tryUnlock(); }
+            });
+            if (btnLock) btnLock.addEventListener('click', lock);
+
+            if (firstPinTip) {
+                firstPinTip.textContent = pinWasSet()
+                    ? ''
+                    : 'First time? Default PIN is ' + DEFAULT_PIN + '. Change it under the PIN button after logging in.';
+                firstPinTip.style.display = pinWasSet() ? 'none' : 'block';
+            }
+
+            if (btnChangePin) {
+                btnChangePin.addEventListener('click', function () {
+                    pinCurrent.value = '';
+                    pinNew.value = '';
+                    pinConfirm.value = '';
+                    pinChangeError.textContent = '';
+                    pinChangeError.classList.remove('show');
+                    new bootstrap.Modal(document.getElementById('pinModal')).show();
+                });
+            }
+
+            function pinModalError(msg) {
+                pinChangeError.textContent = msg;
+                pinChangeError.classList.add('show');
+            }
+
+            if (btnSavePin) {
+                btnSavePin.addEventListener('click', function () {
+                    var cur = (pinCurrent.value || '').trim();
+                    var nw = (pinNew.value || '').trim();
+                    var cf = (pinConfirm.value || '').trim();
+                    if (cur !== storedPin()) { pinModalError('Current PIN is incorrect.'); return; }
+                    if (!/^\d{4,8}$/.test(nw)) { pinModalError('New PIN must be 4–8 digits.'); return; }
+                    if (nw !== cf) { pinModalError('New PINs do not match.'); return; }
+                    try {
+                        localStorage.setItem(PIN_KEY, nw);
+                        localStorage.setItem(PIN_SET_KEY, '1');
+                    } catch (e) { pinModalError('Could not save PIN.'); return; }
+                    if (firstPinTip) firstPinTip.style.display = 'none';
+                    bootstrap.Modal.getInstance(document.getElementById('pinModal')).hide();
+                });
+            }
+
             /* ================= INIT ================= */
             orders = readStorage();
             for (var i = 0; i < orders.length; i++) {
@@ -1037,6 +1320,9 @@
             } else {
                 render();
             }
+            seedDefaultPin();
+            applyLock();
+            if (isLocked() && pinInput) pinInput.focus();
         })();
     </script>
 </body>
